@@ -1,0 +1,28 @@
+<ModMetaData>
+	<name>Categorized Bill Menus</name>
+	<author>kathanon</author>
+    <packageId>kathanon.CategorizedBillMenus</packageId>
+	<supportedVersions>
+		<li>1.4</li>
+	</supportedVersions>
+	<description></description>
+	<url>https://github.com/kathanon/RimWorld-CategorizedBillMenus</url>
+
+	<modDependencies>
+		<li>
+			<packageId>brrainz.harmony</packageId> 
+			<displayName>Harmony</displayName>
+			<downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
+			<steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
+		</li>
+		<li>
+			<packageId>kathanon.FloatSubMenu</packageId>
+			<displayName>Float Sub-Menus</displayName>
+			<steamWorkshopUrl>steam://url/CommunityFilePage/2864015430</steamWorkshopUrl>
+		</li>
+	</modDependencies>
+	<loadAfter>
+		<li>brrainz.harmony</li>
+		<li>kathanon.FloatSubMenu</li>
+	</loadAfter>
+</ModMetaData>
