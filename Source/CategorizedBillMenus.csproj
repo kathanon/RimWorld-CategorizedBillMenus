@@ -60,6 +60,8 @@
   <!-- Project files -->
   <ItemGroup>
     <Compile Include="BillStack_Patches.cs" />
+    <Compile Include="CheckValue.cs" />
+    <Compile Include="MenuNode.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Strings.cs" />
     <Compile Include="Main.cs" />
