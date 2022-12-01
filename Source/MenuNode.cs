@@ -9,9 +9,27 @@ namespace CategorizedBillMenus {
     public abstract class MenuNode {
         public static MenuNode Root() => new RootNode();
 
-        public virtual void Add(RecipeDef recipe, FloatMenuOption opt) { }
+        public virtual void Add(BillMenuEntry entry) { }
+
+        public void AddRange(IEnumerable<BillMenuEntry> entries) {
+            foreach (var entry in entries) {
+                Add(entry);
+            }
+        }
 
         public virtual void Collapse() {}
+
+        public virtual List<FloatMenuOption> List => null;
+
+        public virtual void Add(MenuNode n) { }
+
+        public virtual MenuNode For(ThingCategoryDef cat) => null;
+
+        public virtual MenuNode For(string cat,
+                                    Texture2D icon = null,
+                                    int pos = -1,
+                                    bool canCollapse = true)
+            => null;
 
         protected virtual MenuNode CollapseTo => this;
 
@@ -23,15 +41,7 @@ namespace CategorizedBillMenus {
 
         protected virtual bool HasIcon => false;
 
-        public virtual List<FloatMenuOption> List => null;
-
         protected virtual FloatMenuOption Option => null;
-
-        protected virtual void Add(MenuNode n) { }
-
-        protected virtual MenuNode For(ThingCategoryDef cat) => null;
-
-        protected virtual MenuNode For(string cat, Texture2D icon = null, int pos = -1) => null;
 
         private abstract class NonLeaf : MenuNode {
             protected readonly List<MenuNode> children = new List<MenuNode>();
@@ -51,20 +61,24 @@ namespace CategorizedBillMenus {
                 }
             }
 
-            protected override MenuNode CollapseTo => 
-                (children.Count == 1) ? children[0] : this;
+            protected override MenuNode CollapseTo 
+                => (children.Count == 1) ? children[0] : this;
 
             protected override bool HasIcon => icon != null && icon != BaseContent.ClearTex;
 
             protected override void UseEmptyIcon() => icon = icon ?? BaseContent.ClearTex;
 
-            protected override void Add(MenuNode n) => children.Add(n);
+            public override void Add(MenuNode n) => children.Add(n);
 
-            protected override MenuNode For(ThingCategoryDef cat) => 
-                children.FirstOrDefault(n => n.Match(cat)) ?? new ThingCategory(cat, children);
+            public override MenuNode For(ThingCategoryDef cat) 
+                => children.FirstOrDefault(n => n.Match(cat)) ?? new ThingCategory(cat, children);
 
-            protected override MenuNode For(string cat, Texture2D icon = null, int pos = -1) => 
-                children.FirstOrDefault(n => n.Match(cat)) ?? new ExtraCategory(cat, icon, children, pos);
+            public override MenuNode For(string cat,
+                                         Texture2D icon = null,
+                                         int pos = -1,
+                                         bool canCollapse = true)
+                => children.FirstOrDefault(n => n.Match(cat)) 
+                   ?? new ExtraCategory(cat, icon, children, pos, canCollapse);
         }
 
         private class Leaf : MenuNode {
@@ -96,10 +110,12 @@ namespace CategorizedBillMenus {
 
         private class ExtraCategory : NonLeaf {
             private readonly string cat;
+            private readonly bool canCollapse;
 
-            public ExtraCategory(string cat, Texture2D icon, List<MenuNode> children, int pos) {
+            public ExtraCategory(string cat, Texture2D icon, List<MenuNode> children, int pos, bool canCollapse) {
                 this.cat = cat;
                 this.icon = icon;
+                this.canCollapse = canCollapse;
                 if (pos < 0) {
                     children.Add(this);
                 } else {
@@ -107,38 +123,44 @@ namespace CategorizedBillMenus {
                 }
             }
 
-            protected override MenuNode CollapseTo => this;
+            protected override MenuNode CollapseTo 
+                => canCollapse ? base.CollapseTo : this;
 
-            protected override FloatMenuOption Option => 
-                new FloatSubMenu(cat, List, icon, Color.white);
+            protected override FloatMenuOption Option 
+                => new FloatSubMenu(cat, List, icon, Color.white);
 
             protected override bool Match(string cat) => cat == this.cat;
         }
 
         private class RootNode : NonLeaf {
-            public override void Add(RecipeDef recipe, FloatMenuOption opt) {
+            public override void Add(BillMenuEntry entry) {
+                var recipe = entry.Recipe;
                 var thing = recipe.ProducedThingDef;
-                MenuNode n = this;
-                if (thing != null && !thing.thingCategories.NullOrEmpty()) {
-                    var category = thing.thingCategories[0];
-                    foreach (var cat in category.Parents.Reverse().AddItem(category)) {
-                        if (!Settings.IsDisabled(cat)) {
-                            n = n.For(cat);
-                        }
+                var nodes = new List<MenuNode> { this };
+                var nodesNew = new List<MenuNode>();
+                var leaf = new Leaf(entry.Option);
+                bool first = true;
+                foreach (var categorizer in Settings.Categorizers) {
+                    if (categorizer.AppliesTo(entry, first)) {
+                        nodesNew.AddRange(nodes.SelectMany(n => categorizer.Apply(entry, n, this, first)));
+                        nodes.Clear();
+                        (nodes, nodesNew) = (nodesNew, nodes);
+                        first = false;
                     }
                 }
+                foreach (var n in nodes) {
+                    n.Add(leaf);
+                }
 
-                var leaf = new Leaf(opt);
-                n.Add(leaf);
                 if (Settings.IsFav(recipe)) {
                     Fav.Add(leaf);
                 }
             }
 
-            public override List<FloatMenuOption> List => 
-                (children.Count == 1 && children[0] is NonLeaf) ? children[0].List : base.List;
+            public override List<FloatMenuOption> List 
+                => (children.Count == 1 && children[0] is NonLeaf) ? children[0].List : base.List;
 
-            private MenuNode Fav => For(Strings.FavCat, Textures.FavIcon, 0);
+            private MenuNode Fav => For(Strings.FavCat, Textures.FavIcon, 0, false);
         }
     }
 }

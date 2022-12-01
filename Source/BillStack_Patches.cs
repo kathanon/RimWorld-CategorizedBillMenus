@@ -1,71 +1,148 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using UnityEngine;
 using Verse;
 
 namespace CategorizedBillMenus {
+    using MenuMatcherFunc = Func<List<FloatMenuOption>, IEnumerable<BillMenuEntry>>;
+
     [HarmonyPatch]
     public static class BillStack_Patches {
+
+        public static readonly RecipeCollector Collector = new RecipeCollector();
+
         private const float IconSize   = 24f;
         private const float IconMargin =  5f;
         private const float IconAdjust =  2f;
 
+        private enum Generators {
+            None,
+            WorkTable,
+            Operations,
+            Length
+        }
+
+        private static readonly bool[] activeFlags = new bool[(int) Generators.Length];
+        private static Generators currentFlag = Generators.None;
+
+        private static bool CurrentActive {
+            set => activeFlags[(int) currentFlag] = value;
+        }
+
+        private static bool Active(Generators gen) => activeFlags[(int) gen];
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(BillStack), nameof(BillStack.DoListing))]
         public static void DoListing(ref Func<List<FloatMenuOption>> recipeOptionsMaker) {
-            var local = recipeOptionsMaker;
-            recipeOptionsMaker = () => MakeSubmenus(local());
-        }
-
-        private static List<FloatMenuOption> MakeSubmenus(List<FloatMenuOption> options) {
-            if (Find.Selector.SingleSelectedThing is Building_WorkTable table) {
-                var list = new List<FloatMenuOption>();
-                bool useFav = Settings.UseFavorites;
-
-                // Find what recipes match with what menu option
-                var matchedRecipes = new List<RecipeDef>();
-                var ideos = Faction.OfPlayer.ideos.AllIdeos;
-                var recipes = table.def.AllRecipes.Where(r => r.AvailableNow && r.AvailableOnNow(table));
-                int j = 0;
-                foreach (var recipe in recipes) {
-                    var produced = recipe.ProducedThingDef;
-                    int n = 1 + ((produced == null) ? 0 : ideos.SelectMany(i => i.PreceptsFor(produced)).Count());
-                    for (int i = 0; i < n; i++) {
-                        matchedRecipes.Add(recipe);
-                        var opt = options[j + i];
-                        opt.extraPartRightJustified = true;
-                        opt.extraPartWidth += IconAdjust;
-                    }
-
-                    if (useFav) {
-                        var opt = options[j];
-                        opt.extraPartWidth += IconSize - IconMargin;
-                        var func = opt.extraPartOnGUI;
-                        opt.extraPartOnGUI = (r) => DrawFavIcon(r, recipe, func);
-                    }
-                    j += n;
-                }
-                if (options.Count != matchedRecipes.Count) {
-                    Log.Warning($"{Strings.Name}: Could not match recipes to bill menu options. Not altering menu.");
-                    return options;
-                }
-
-                // Add to categories
-                var root = MenuNode.Root();
-                for (int i = 0; i < options.Count; i++) {
-                    root.Add(matchedRecipes[i], options[i]);
-                }
-                root.Collapse();
-                return root.List;
-            } else { 
-                return options;
+            if (currentFlag != Generators.None) {
+                var local = recipeOptionsMaker;
+                recipeOptionsMaker = () => MakeSubmenus(local);
             }
         }
 
-        private static bool DrawFavIcon(Rect rect, RecipeDef recipe, Func<Rect,bool> original) {
+
+        // Work table
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(ITab_Bills), "FillTab")]
+        public static void ITab_Bills_Pre() => currentFlag = Generators.WorkTable;
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(ITab_Bills), "FillTab")]
+        public static void ITab_Bills_Post() => currentFlag = Generators.None;
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(RecipeDef), nameof(RecipeDef.UIIconThing), MethodType.Getter)]
+        public static void RecipeDef_UIIconThing(RecipeDef __instance) {
+            if (Active(Generators.WorkTable)) Collector.NextRecipe = __instance;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(FloatMenuOption), MethodType.Constructor, 
+            typeof(string), typeof(Action), typeof(ThingDef), typeof(ThingStyleDef), typeof(bool), 
+            typeof(MenuOptionPriority), typeof(Action<Rect>), typeof(Thing), typeof(float), 
+            typeof(Func<Rect, bool>), typeof(WorldObject), typeof(bool), typeof(int), typeof(int?))]
+        public static void FloatMenuOption_Ctor(FloatMenuOption __instance) {
+            if (Active(Generators.WorkTable)) Collector.Add(__instance);
+        }
+
+        // Operations
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(HealthCardUtility), "DrawMedOperationsTab")]
+        public static void HealthCardUtility_Pre() 
+            => currentFlag = Generators.Operations;
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(HealthCardUtility), "DrawMedOperationsTab")]
+        public static void HealthCardUtility_Post() 
+            => currentFlag = Generators.None;
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(HealthCardUtility), "GenerateSurgeryOption")]
+        public static void GenerateSurgeryOption(FloatMenuOption __result, RecipeDef recipe, BodyPartRecord part) {
+            if (Active(Generators.Operations)) {
+                Collector.Add(new BillMenuEntry(__result, recipe, part));
+            }
+        }
+
+        public class RecipeCollector {
+            public readonly List<BillMenuEntry> Entries = new List<BillMenuEntry>();
+            public RecipeDef NextRecipe = null;
+
+            public void Add(FloatMenuOption opt) => Entries.Add(new BillMenuEntry(opt, NextRecipe));
+
+            public void Add(BillMenuEntry entry) => Entries.Add(entry);
+
+            public void Reset() {
+                Entries.Clear();
+                NextRecipe = null;
+            }
+        }
+
+        private static List<FloatMenuOption> MakeSubmenus(Func<List<FloatMenuOption>> optionsMaker) {
+            List<FloatMenuOption> res = null;
+            CurrentActive = true;
+            var options = optionsMaker();
+            CurrentActive = false;
+            var entries = Collector.Entries;
+
+            bool useFav = Settings.UseFavorites;
+            bool rightAlign = Settings.RightAlign;
+            if (useFav || rightAlign) {
+                foreach (var entry in entries) {
+                    var opt = entry.Option;
+                    if (rightAlign) {
+                        opt.extraPartRightJustified = true;
+                        opt.extraPartWidth += IconAdjust;
+                    }
+                    if (useFav) {
+                        opt.extraPartWidth += IconSize - IconMargin;
+                        var func = opt.extraPartOnGUI;
+                        opt.extraPartOnGUI = (r) => DrawFavIcon(r, entry.Recipe, func);
+                    }
+                }
+            }
+
+            if (entries.Count == 0) {
+                res = options;
+            } else {
+                var root = MenuNode.Root();
+                root.AddRange(entries);
+                if (Settings.Collapse) root.Collapse();
+                res = root.List;
+            }
+
+            Collector.Reset();
+            return res;
+        }
+
+        private static bool DrawFavIcon(Rect rect, RecipeDef recipe, Func<Rect, bool> original) {
             bool fav = Settings.IsFav(recipe);
             var color = fav ? Color.white : Color.grey;
             var mouseColor = fav ? GenUI.MouseoverColor : GenUI.SubtleMouseoverColor;
@@ -78,7 +155,7 @@ namespace CategorizedBillMenus {
             return original(rect);
         }
 
-        public static IEnumerable<Precept_Building> PreceptsFor(this Ideo ideo, ThingDef def) => 
+        public static IEnumerable<Precept_Building> PreceptsFor(this Ideo ideo, ThingDef def) =>
             ideo.cachedPossibleBuildings.Where(p => p.ThingDef == def);
     }
 }

@@ -59,9 +59,23 @@
   </ItemGroup>
   <!-- Project files -->
   <ItemGroup>
+    <Compile Include="BillMenuEntry.cs" />
     <Compile Include="BillStack_Patches.cs" />
+    <Compile Include="CategorizerManual.cs" />
+    <Compile Include="CategorizerRuleBased.cs" />
+    <Compile Include="Categorizer.cs" />
+    <Compile Include="CategorizerDefault.cs" />
+    <Compile Include="CategorizerEditable.cs" />
+    <Compile Include="CategorizerMedicalByLimb.cs" />
+    <Compile Include="CategorizerSingleton.cs" />
+    <Compile Include="CategoryRule.cs" />
     <Compile Include="CheckValue.cs" />
     <Compile Include="MenuNode.cs" />
+    <Compile Include="RuleAction.cs" />
+    <Compile Include="RuleActionByLimb.cs" />
+    <Compile Include="RuleActionExtra.cs" />
+    <Compile Include="RuleCondition.cs" />
+    <Compile Include="RuleConditionSurgery.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Strings.cs" />
     <Compile Include="Main.cs" />

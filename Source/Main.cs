@@ -7,9 +7,10 @@ namespace CategorizedBillMenus {
     public class Main : Mod {
         public static Main Instance { get; private set; }
 
-        public static void LoadSettings() => Instance.GetSettings<Settings>();
+        private Settings settings = null;
 
-        public Settings Settings => GetSettings<Settings>();
+        public Settings Settings => 
+            settings ?? (settings = GetSettings<Settings>().EnsureSetup());
 
         static Main() {
             var harmony = new Harmony(Strings.ID);
@@ -24,11 +25,5 @@ namespace CategorizedBillMenus {
             Settings.DoWindowContents(inRect);
 
         public override string SettingsCategory() => Strings.Name;
-    }
-
-    [HarmonyPatch(typeof(PlayDataLoader), nameof(PlayDataLoader.LoadAllPlayData))]
-    public static class GameStartedHook {
-        [HarmonyPostfix]
-        public static void Hook() => Main.LoadSettings();
     }
 }

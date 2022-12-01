@@ -10,9 +10,12 @@ using Verse;
 
 namespace CategorizedBillMenus {
     public class Settings : ModSettings {
-        private HashSet<string> favorites = new HashSet<string>();
-        private HashSet<string> disabledCats = new HashSet<string>();
+        private HashSet<string> favorites;
+        private HashSet<string> disabledCats;
+        private List<(Categorizer cat, bool active)> categorizers;
         private bool useFavorites = true;
+        private bool rightAlign = true;
+        private bool collapse = true;
 
         private HashSet<string> favoritesBackup = null;
 
@@ -23,12 +26,18 @@ namespace CategorizedBillMenus {
             new Dictionary<ThingCategoryDef, string>();
 
         private static Settings inst = null;
-        private static ThingCategoryDef root;
+        private static ThingCategoryDef root = null;
 
         public static Settings Instance => inst ?? (inst = Main.Instance.Settings);
 
         public static bool UseFavorites => Instance.useFavorites;
         public bool UseFavoritesInst => useFavorites;
+
+        public static bool RightAlign => Instance.rightAlign;
+        public bool RightAlignInst => rightAlign;
+
+        public static bool Collapse => Instance.collapse;
+        public bool CollapseInst => collapse;
 
         public static bool IsFav(RecipeDef def) => Instance.IsFavInst(def);
         public bool IsFavInst(RecipeDef def) => useFavorites && favoriteRecipes.Contains(def);
@@ -45,11 +54,11 @@ namespace CategorizedBillMenus {
             Write();
         }
 
-        internal static bool IsDisabled(ThingCategoryDef def) => Instance.IsDisabledInst(def);
-        internal bool IsDisabledInst(ThingCategoryDef def) => disabledCatDefs.Contains(def);
+        public static bool IsDisabled(ThingCategoryDef def) => Instance.IsDisabledInst(def);
+        public bool IsDisabledInst(ThingCategoryDef def) => disabledCatDefs.Contains(def);
 
-        internal static void ToggleDisabled(ThingCategoryDef def) => Instance.ToggleDisabledInst(def);
-        internal void ToggleDisabledInst(ThingCategoryDef def) {
+        public static void ToggleDisabled(ThingCategoryDef def) => Instance.ToggleDisabledInst(def);
+        public void ToggleDisabledInst(ThingCategoryDef def) {
             if (disabledCatDefs.Remove(def)) {
                 disabledCats.Remove(def.defName);
             } else {
@@ -58,15 +67,18 @@ namespace CategorizedBillMenus {
             }
         }
 
-        internal static void ToggleInactiveDisabled(string defName) => Instance.ToggleInactiveDisabledInst(defName);
-        internal void ToggleInactiveDisabledInst(string defName) {
+        public static void ToggleInactiveDisabled(string defName) => Instance.ToggleInactiveDisabledInst(defName);
+        public void ToggleInactiveDisabledInst(string defName) {
             if (!disabledCats.Remove(defName)) {
                 disabledCats.Add(defName);
             }
         }
 
+        public static IEnumerable<Categorizer> Categorizers => Instance.CategorizersInst;
+        public  IEnumerable<Categorizer> CategorizersInst => categorizers.Where(c => c.active).Select(c => c.cat);
+
         private readonly List<string> inactive = new List<string>();
-        internal List<string> InactiveDisabled => inactive;
+        public List<string> InactiveDisabled => inactive;
 
 
         public override void ExposeData() {
@@ -75,44 +87,69 @@ namespace CategorizedBillMenus {
             Scribe_Values.Look(ref useFavorites, "useFavorites", true);
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit) {
-                if (favorites == null) favorites = new HashSet<string>();
-                if (disabledCats == null) disabledCats = new HashSet<string>();
-                root = ThingCategoryDefOf.Root;
-
-                favoriteRecipes.Clear();
-                favoriteRecipes.AddRange(DefDatabase<RecipeDef>.AllDefs.Where(r => favorites.Contains(r.defName)));
-                allCatDefs.Clear();
-                allCatDefs.AddRange(DefDatabase<ThingCategoryDef>.AllDefs.Where(c => c != root));
-                allCatDefs.SortBy(c => c.LabelCap.ToString());
-                disabledCatDefs.Clear();
-                disabledCatDefs.AddRange(allCatDefs.Where(c => disabledCats.Contains(c.defName)));
-                disabledCatDefs.Add(root);
-
-                var inactiveTmp = new HashSet<string>();
-                inactiveTmp.AddRange(disabledCats);
-                foreach (var def in disabledCatDefs) {
-                    inactiveTmp.Remove(def.defName);
-                }
-                inactive.Clear();
-                inactive.AddRange(inactiveTmp);
-                inactive.Sort();
-
-                replacementNames.Clear();
-                string prev = null;
-                ThingCategoryDef prevCat = null;
-                foreach (var curCat in allCatDefs) {
-                    string cur = curCat.LabelCap;
-                    if (cur == prev) {
-                        replacementNames[prevCat] = $"{prev} ({prevCat.parent.LabelCap})";
-                        replacementNames[curCat] = $"{cur} ({curCat.parent.LabelCap})";
-                    }
-                    prev = cur;
-                    prevCat = curCat;
-                }
-
-                maxCatWidth = -1f;
-                treeCatWidth = -1f;
+                Setup();
             }
+        }
+
+        public Settings EnsureSetup() {
+            if (root == null || favorites == null || disabledCats == null) {
+                Setup();
+            }
+            return this;
+        }
+
+        private void Setup() {
+            // TODO: Make configurable
+            if (categorizers == null) {
+                categorizers = DefaultCategorizers();
+            }
+            // ---
+
+
+            if (favorites == null) favorites = new HashSet<string>();
+            if (disabledCats == null) disabledCats = new HashSet<string>();
+            root = ThingCategoryDefOf.Root;
+
+            favoriteRecipes.Clear();
+            favoriteRecipes.AddRange(DefDatabase<RecipeDef>.AllDefs.Where(r => favorites.Contains(r?.defName)));
+            allCatDefs.Clear();
+            allCatDefs.AddRange(DefDatabase<ThingCategoryDef>.AllDefs.Where(c => c != root && c != null));
+            allCatDefs.SortBy(c => c.LabelCap.ToString());
+            disabledCatDefs.Clear();
+            disabledCatDefs.AddRange(allCatDefs.Where(c => disabledCats.Contains(c.defName)));
+            disabledCatDefs.Add(root);
+
+            var inactiveTmp = new HashSet<string>();
+            inactiveTmp.AddRange(disabledCats);
+            foreach (var def in disabledCatDefs) {
+                inactiveTmp.Remove(def.defName);
+            }
+            inactive.Clear();
+            inactive.AddRange(inactiveTmp);
+            inactive.Sort();
+
+            replacementNames.Clear();
+            string prev = null;
+            ThingCategoryDef prevCat = null;
+            foreach (var curCat in allCatDefs) {
+                string cur = curCat.LabelCap;
+                if (cur == prev) {
+                    if (prevCat.parent != null) replacementNames[prevCat] = $"{prev} ({prevCat.parent.LabelCap})";
+                    if (curCat .parent != null) replacementNames[curCat ] = $"{cur } ({curCat .parent.LabelCap})";
+                }
+                prev = cur;
+                prevCat = curCat;
+            }
+
+            maxCatWidth = -1f;
+            treeCatWidth = -1f;
+        }
+
+        private static List<(Categorizer cat, bool active)> DefaultCategorizers() {
+            return new List<(Categorizer cat, bool active)> {
+                    (CategorizerDefault.Instance,                true),
+                    (CategorizerRuleBased.PresetByLimb.Create(), true),
+            };
         }
 
 
@@ -242,7 +279,7 @@ namespace CategorizedBillMenus {
                 if (maxCatWidth < 0f) {
                     maxCatWidth = allCatDefs
                         .Select(c => Text.CalcSize(CatNameWithReplacements(c)).x)
-                        .Max() + CheckMargin;
+                        .Concat(0f).Max() + CheckMargin;
                 }
                 CalcColumns(rect, maxCatWidth, curY, widthScroll,
                     out Rect row, out int cols, out float colWidth, out float firstCol);
@@ -332,7 +369,7 @@ namespace CategorizedBillMenus {
             replacementNames.TryGetValue(cat, out var repl) ? repl : (string) cat.LabelCap;
         
         private float? CalcTreeCatWidth(ThingCategoryDef cat) => 
-            Mathf.Max(Text.CalcSize(cat.LabelCap).x, TreeIndent + cat.childCategories?.Max(CalcTreeCatWidth) ?? 0f);
+            Mathf.Max(Text.CalcSize(cat?.LabelCap ?? "").x, TreeIndent + cat?.childCategories?.Max(CalcTreeCatWidth) ?? 0f);
 
         private bool FoldableSection(Rect rect, string title, string tooltip, ref bool open, ref float curY) {
             Text.Font = GameFont.Medium;
