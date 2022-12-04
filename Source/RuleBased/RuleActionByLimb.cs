@@ -6,14 +6,22 @@ using System.Threading.Tasks;
 using Verse;
 
 namespace CategorizedBillMenus {
+    [StaticConstructorOnStartup]
     public class RuleActionByLimb : RuleActionExtra {
-        private string noPart = "General";
+        static RuleActionByLimb() {
+            Register(new RuleActionByLimb());
+        }
+
+        private string noPart = Strings.NoBodyPartCat;
         private bool firstPartDef = true;
 
-        public RuleActionByLimb() : base(false) {}
+        public RuleActionByLimb() : this(false) {}
+
+        private RuleActionByLimb(bool copies) 
+            : base(copies, Strings.ActionByLimbName, Strings.ActionByLimbDesc) {}
 
         public override RuleAction Copy() 
-            => new RuleActionByLimb() { noPart = noPart, firstPartDef = firstPartDef };
+            => new RuleActionByLimb(Copies) { noPart = noPart, firstPartDef = firstPartDef };
 
         protected override IEnumerable<string> Categories(BillMenuEntry entry) {
             var part = entry.BodyPart;
@@ -29,6 +37,12 @@ namespace CategorizedBillMenus {
                 }
                 yield return part.LabelCap;
             }
+        }
+
+        public override void ExposeData() {
+            base.ExposeData();
+            Scribe_Values.Look(ref noPart, "noPart", Strings.NoBodyPartCat);
+            Scribe_Values.Look(ref firstPartDef, "firstPartDef", true);
         }
     }
 }

@@ -12,7 +12,6 @@ namespace CategorizedBillMenus {
         private const string Prefix = Strings.ID + "/";
 
         public static readonly Texture2D FavIcon   = ContentFinder<Texture2D>.Get(Prefix + "FavIcon");
-        public static readonly Texture2D RightIcon = ContentFinder<Texture2D>.Get(Prefix + "RightIcon");
-        public static readonly Texture2D DownIcon  = ContentFinder<Texture2D>.Get(Prefix + "DownIcon");
+        public static readonly Texture2D EditIcon  = ContentFinder<Texture2D>.Get(Prefix + "EditIcon");
     }
 }

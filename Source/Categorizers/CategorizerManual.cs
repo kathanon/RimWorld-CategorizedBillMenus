@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using Verse;
 
 namespace CategorizedBillMenus {
+    [StaticConstructorOnStartup]
     public class CategorizerManual : CategorizerEditable {
-        private const string ManualName = "Manual";
-        private const string ManualDesc = "Lets you freely reorder recipies and categories, as well as add new categories.";
-
-        public CategorizerManual() : base(ManualName, ManualDesc) {}
+        public CategorizerManual() : base(Strings.ManualName, Strings.ManualDesc) {}
 
         public override bool AppliesTo(BillMenuEntry entry, bool first) => throw new NotImplementedException();
         public override IEnumerable<MenuNode> Apply(BillMenuEntry entry, MenuNode parent, MenuNode root, bool first) => throw new NotImplementedException();
-        public override Categorizer Create() => throw new NotImplementedException();
+        public override Categorizer Copy() => throw new NotImplementedException();
+        public override void DoSettings(Rect rect, float widthScroll, ref float curY) => throw new NotImplementedException();
+        public override void ExposeData() => base.ExposeData();
     }
 }

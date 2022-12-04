@@ -17,6 +17,8 @@ namespace CategorizedBillMenus {
             }
         }
 
+        public virtual string Label => null;
+
         public virtual void Collapse() {}
 
         public virtual List<FloatMenuOption> List => null;
@@ -102,8 +104,10 @@ namespace CategorizedBillMenus {
                 children.Add(this);
             }
 
+            public override string Label => cat.LabelCap;
+
             protected override FloatMenuOption Option => 
-                new FloatSubMenu(cat.LabelCap, List, icon, Color.white);
+                new FloatSubMenu(Label, List, icon, Color.white);
 
             protected override bool Match(ThingCategoryDef cat) => cat == this.cat;
         }
@@ -122,6 +126,8 @@ namespace CategorizedBillMenus {
                     children.Insert(pos, this);
                 }
             }
+
+            public override string Label => cat;
 
             protected override MenuNode CollapseTo 
                 => canCollapse ? base.CollapseTo : this;

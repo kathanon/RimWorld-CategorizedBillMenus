@@ -4,13 +4,10 @@ using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using UnityEngine;
 using Verse;
 
 namespace CategorizedBillMenus {
-    using MenuMatcherFunc = Func<List<FloatMenuOption>, IEnumerable<BillMenuEntry>>;
-
     [HarmonyPatch]
     public static class BillStack_Patches {
 
@@ -62,13 +59,20 @@ namespace CategorizedBillMenus {
             if (Active(Generators.WorkTable)) Collector.NextRecipe = __instance;
         }
 
-        [HarmonyPrefix]
+        [HarmonyPostfix]
         [HarmonyPatch(typeof(FloatMenuOption), MethodType.Constructor, 
             typeof(string), typeof(Action), typeof(ThingDef), typeof(ThingStyleDef), typeof(bool), 
             typeof(MenuOptionPriority), typeof(Action<Rect>), typeof(Thing), typeof(float), 
             typeof(Func<Rect, bool>), typeof(WorldObject), typeof(bool), typeof(int), typeof(int?))]
-        public static void FloatMenuOption_Ctor(FloatMenuOption __instance) {
-            if (Active(Generators.WorkTable)) Collector.Add(__instance);
+        public static void FloatMenuOption_Ctor(FloatMenuOption __instance,
+                                                ref bool ___drawPlaceHolderIcon,
+                                                ref Texture2D ___itemIcon) {
+            if (Active(Generators.WorkTable)) {
+                Collector.Add(__instance);
+            } else if (Active(Generators.Operations) && ___drawPlaceHolderIcon) {
+                ___drawPlaceHolderIcon = false;
+                ___itemIcon = BaseContent.ClearTex;
+            }
         }
 
         // Operations

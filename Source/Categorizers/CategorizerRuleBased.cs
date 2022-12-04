@@ -3,28 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
+using Verse;
+using Verse.Noise;
 
 namespace CategorizedBillMenus {
+    [StaticConstructorOnStartup]
     public class CategorizerRuleBased : CategorizerEditable {
-        private const string RuleBasedName = "Rule-based";
-        private const string RuleBasedDesc = "Applies an editable list of simple rules.";
+        static CategorizerRuleBased() {
+            Register(new CategorizerRuleBased());
+        }
+
+        public const float IconSize = Settings.IconSize;
+        public const float Margin   = Settings.Margin;
 
         public static readonly CategorizerRuleBased PresetByLimb =
             new CategorizerRuleBased(
                 new List<CategoryRule> {
                     new CategoryRule(RuleConditionSurgery.Instance, new RuleActionByLimb()),
-                }, 
-                "Medical - By Body Part", 
-                "Organizes operation bills after what body part they apply to.");
+                },
+                Strings.ByBodyPartName,
+                Strings.ByBodyPartDesc);
 
-        private readonly List<CategoryRule> rules;
+        protected override IEnumerable<Categorizer> SubOptions(int level) {
+            if (level == 0) {
+                yield return this;
+                yield return PresetByLimb;
+            }
+        }
+
+        private List<CategoryRule> rules;
         private bool allowAfter;
 
         public CategorizerRuleBased() 
             : this(new List<CategoryRule>()) {}
 
         public CategorizerRuleBased(List<CategoryRule> rules) 
-            : this(rules, RuleBasedName, RuleBasedDesc) {}
+            : this(rules, Strings.RuleBasedName, Strings.RuleBasedDesc) {}
 
         private CategorizerRuleBased(List<CategoryRule> rules, string name, string description) 
             : base(name, description) {
@@ -66,9 +81,30 @@ namespace CategorizedBillMenus {
             }
         }
 
-        public override Categorizer Create() 
+        public override Categorizer Copy() 
             => new CategorizerRuleBased(rules.Select(r => r.Copy()).ToList(),
-                                        Name,
-                                        Description);
+                                        Strings.ByBodyPartName,
+                                        Strings.ByBodyPartDesc);
+
+        public override void DoSettings(Rect rect, float _, ref float curY) {
+            rect.xMin += IconSize + Margin;
+            var icon = new Rect(rect.x, curY, IconSize, IconSize);
+
+            ExtraWidgets.ReorderableList(rules, AddRule, DoRule, rect, ref curY);
+
+            void DoRule(CategoryRule rule, Rect r, float offset, ref float innerCurY) {
+                rule.DoSettings(r, ref innerCurY);
+            }
+        }
+
+        public void AddRule() => AddRule(new CategoryRule());
+
+        public void AddRule(CategoryRule rule) => rules.Add(rule);
+
+        public override void ExposeData() {
+            base.ExposeData();
+            Scribe_Collections.Look(ref rules, "rules", LookMode.Deep);
+            Scribe_Values.Look(ref allowAfter, "allowAfter");
+        }
     }
 }

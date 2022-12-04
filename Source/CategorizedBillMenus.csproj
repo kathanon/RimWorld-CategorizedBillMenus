@@ -61,22 +61,35 @@
   <ItemGroup>
     <Compile Include="BillMenuEntry.cs" />
     <Compile Include="BillStack_Patches.cs" />
-    <Compile Include="CategorizerManual.cs" />
-    <Compile Include="CategorizerRuleBased.cs" />
-    <Compile Include="Categorizer.cs" />
-    <Compile Include="CategorizerDefault.cs" />
-    <Compile Include="CategorizerEditable.cs" />
-    <Compile Include="CategorizerMedicalByLimb.cs" />
-    <Compile Include="CategorizerSingleton.cs" />
-    <Compile Include="CategoryRule.cs" />
+    <Compile Include="Categorizers\CategorizerManual.cs" />
+    <Compile Include="Categorizers\CategorizerRuleBased.cs" />
+    <Compile Include="Categorizers\Categorizer.cs" />
+    <Compile Include="Categorizers\CategorizerThingCategory.cs" />
+    <Compile Include="Categorizers\CategorizerEditable.cs" />
+    <Compile Include="Categorizers\CategorizerSingleton.cs" />
+    <Compile Include="RuleBased\CategoryRule.cs" />
     <Compile Include="CheckValue.cs" />
+    <Compile Include="Settings\IReorderableItem.cs" />
+    <Compile Include="Settings\ExtraWidgets.cs" />
     <Compile Include="MenuNode.cs" />
-    <Compile Include="RuleAction.cs" />
-    <Compile Include="RuleActionByLimb.cs" />
-    <Compile Include="RuleActionExtra.cs" />
-    <Compile Include="RuleCondition.cs" />
-    <Compile Include="RuleConditionSurgery.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="RuleBased\Comparison.cs" />
+    <Compile Include="RuleBased\ComparisonValue.cs" />
+    <Compile Include="RuleBased\ComparisonValueDef.cs" />
+    <Compile Include="RuleBased\ComparisonValueDefs.cs" />
+    <Compile Include="RuleBased\ComparisonValueParent.cs" />
+    <Compile Include="RuleBased\ComparisonValueIngredient.cs" />
+    <Compile Include="RuleBased\ComparisonValueRecipe.cs" />
+    <Compile Include="RuleBased\RuleAction.cs" />
+    <Compile Include="RuleBased\RuleActionByLimb.cs" />
+    <Compile Include="RuleBased\RuleActionExtra.cs" />
+    <Compile Include="RuleBased\RuleActionByResearch.cs" />
+    <Compile Include="RuleBased\RuleCondition.cs" />
+    <Compile Include="RuleBased\RuleConditionComparison.cs" />
+    <Compile Include="RuleBased\RuleConditionComposite.cs" />
+    <Compile Include="RuleBased\RuleConditionSurgery.cs" />
+    <Compile Include="Registerable.cs" />
+    <Compile Include="Settings\ISettingsEntry.cs" />
+    <Compile Include="Settings\Settings.cs" />
     <Compile Include="Strings.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -88,4 +101,5 @@
       <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
     </None>
   </ItemGroup>
+  <ItemGroup />
 </Project>

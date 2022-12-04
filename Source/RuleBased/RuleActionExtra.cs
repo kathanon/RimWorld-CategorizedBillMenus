@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace CategorizedBillMenus {
     public abstract class RuleActionExtra : RuleAction {
-        protected RuleActionExtra(bool copies) : base(copies) {}
+        protected RuleActionExtra(bool copies, string name, string description) 
+            : base(copies, name, description) {}
 
         protected abstract IEnumerable<string> Categories(BillMenuEntry entry);
 
