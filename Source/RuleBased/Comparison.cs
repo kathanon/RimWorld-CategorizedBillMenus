@@ -31,7 +31,7 @@ namespace CategorizedBillMenus {
             => value.IndexOf(expected, IgnoreCase) == 0;
     }
 
-    public abstract class Comparison : Registerable<Comparison>, ISettingsEntry {
+    public abstract class Comparison : Registerable<Comparison> {
         public static string AlwaysMatchMarker = new StringBuilder("dummy").ToString();
 
         public const StringComparison IgnoreCase = StringComparison.OrdinalIgnoreCase;

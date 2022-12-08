@@ -12,8 +12,7 @@ namespace CategorizedBillMenus {
             Register(new ComparisonValueParent());
         }
 
-        public ComparisonValueParent() : base("parent menu", "Compare with the label of the current parent sub-menu.") {
-        }
+        public ComparisonValueParent() : base("parent menu", "Compare with the label of the current parent sub-menu.") {}
 
         public override ComparisonValue Copy() => this;
 

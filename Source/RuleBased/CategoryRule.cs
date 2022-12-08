@@ -1,16 +1,29 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using Verse.Noise;
 
 namespace CategorizedBillMenus {
     public class CategoryRule : IExposable {
-        public const float EmptyWidth = 80f;
-        public const float Margin     = Settings.Margin;
-        public const float RowHeight  = Settings.CheckboxSize + Margin;
+        public const float EmptyWidth    = 80f;
+        public const float SmallMargin   =  4f;
+        public const float RuleIconSize  = 18f;
+        public const float Margin        = Settings.Margin;
+        public const float CheckboxSize  = Settings.CheckboxSize;
+        public const float RowHeight     = CheckboxSize + Margin;
+        public const float RuleIconYAdj  = (CheckboxSize - RuleIconSize) / 2;
+        public const float RuleIconSpace = RuleIconSize + SmallMargin;
+        public const float SkipAdjust    = SmallMargin + WidgetRow.ButtonExtraSpace;
+
+        private static readonly string[] allowAfterTips = {
+            "And then continue applying rules.",
+            "And then stop applying rules."
+        };
 
         public const UIDirection Dir = UIDirection.RightThenDown;
 
@@ -59,30 +72,31 @@ namespace CategorizedBillMenus {
         public void DoSettings(Rect rect, ref float curY) {
             float width = (rect.width - Margin) / 2;
             var row = new WidgetRow();
+            float y1 = curY, y2 = curY;
 
             var subRect = rect.LeftPartPixels(width);
-            row.Init(subRect.x, curY, Dir, subRect.width, Margin / 2);
-            var y1 = DoPart(condition, ConditionMenu, "If recipe", row, subRect);
+            DoPart(condition, c => condition = c, "If recipe", row, subRect, 2, ref y1);
 
             subRect.x = (y1 > curY) ? rect.x + width + Margin : row.FinalX;
-            subRect.xMax = rect.xMax;
-            row.Init(subRect.x, curY, Dir, subRect.width, Margin / 2);
-            var y2 = DoPart(action, ActionMenu, "then apply", row, subRect);
+            subRect.xMax = rect.xMax - RuleIconSpace;
+            DoPart(action, a => action = a, "then apply", row, subRect, 1, ref y2);
+
+            var after = new Rect(rect.xMax - RuleIconSize, curY + RuleIconYAdj, RuleIconSize, RuleIconSize);
+            ExtraWidgets.ToggleButton(
+                after, ref allowAfter, TexButton.SpeedButtonTextures, allowAfterTips, iconXAdj: RuleIconSize / 3);
 
             curY = Mathf.Max(y1, y2);
         }
 
-        private void ConditionMenu() => RuleCondition.SelectionMenu(c => condition = c, condition);
-        private void ActionMenu() => RuleAction.SelectionMenu(a => action = a, action);
-
-        private float DoPart<T>(T cur, Action menu, string label, WidgetRow row, Rect rect) 
-                where T : ISettingsEntry {
+        private void DoPart<T>(
+                T cur, Action<T> set, string label, WidgetRow row, Rect rect, int buttons, ref float curY) 
+                where T : RulePart<T> {
+            row.Init(rect.x, curY, Dir, rect.width, Margin / 2);
+            row.ButtonRect(null, buttons * RuleIconSpace - SkipAdjust); // Add space for toggle icons
             row.Label(label);
             row.Gap(Margin - 2f);
-            row.MenuButton(cur, menu);
-            float curY = row.FinalY + RowHeight;
+            row.SelectMenuButton(cur, set);
             cur?.DoSettings(row, rect, ref curY);
-            return curY;
         }
     }
 }

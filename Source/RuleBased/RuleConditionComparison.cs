@@ -9,8 +9,6 @@ using Verse;
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
     public class RuleConditionComparison : RuleCondition {
-        public const float Margin = Settings.Margin;
-
         private ComparisonValue value;
         private Comparison comparison;
         private string expected;
@@ -38,14 +36,12 @@ namespace CategorizedBillMenus {
         public override bool Test(BillMenuEntry entry, MenuNode parent) 
             => Complete && value.Compare(comparison, entry, parent, expected);
 
-        public override void DoSettings(WidgetRow row, Rect rect, ref float curY) {
-            row.MenuButton(value, () => ComparisonValue.SelectionMenu(c => value = c, value));
-            row.MenuButton(comparison, () => Comparison.SelectionMenu(c => comparison = c, comparison));
-            var r = row.ButtonRect(null, 70f);
-            r.height -= 2f;
-            expected = Widgets.TextField(r, expected);
-            curY = r.yMax + Margin;
-            base.DoSettings(row, rect, ref curY);
+        protected override void DoSettingsLocal(WidgetRow row, Rect rect, ref float curY) {
+            row.SelectMenuButton(value, v => value = v);
+            value?.DoSettings(row, rect, ref curY);
+            row.SelectMenuButton(comparison, c => comparison = c);
+            comparison?.DoSettings(row, rect, ref curY);
+            row.TextField(ref expected, ref curY);
         }
 
         public override void ExposeData() {

@@ -7,25 +7,46 @@ using UnityEngine;
 using Verse;
 
 namespace CategorizedBillMenus {
-    public abstract class RuleAction : Registerable<RuleAction>, ISettingsEntry {
+    [StaticConstructorOnStartup]
+    public abstract class RuleAction : RulePart<RuleAction> {
+        private static readonly string[] copiesTips = {
+            "Moves the menu option to the new place.",
+            "Copies the menu option to the new place."
+        };
+        private static readonly Texture2D[] copiesIcons = {
+            TexButton.Paste,
+            TexButton.Copy
+        };
+
         private bool copies;
 
         protected RuleAction(bool copies, string name, string description) 
-            : base(name, description) {
+                : base(name, description) {
             this.copies = copies;
         }
 
         public bool Copies => copies;
 
+        public override void CopyFrom(RuleAction from) {
+            copies = from.copies;
+        }
+
         public abstract MenuNode Apply(BillMenuEntry entry, MenuNode parent, MenuNode root);
 
-        public virtual void DoSettings(WidgetRow row) {}
-
-        public virtual void DoSettings(WidgetRow row, Rect rect, ref float curY) => DoSettings(row);
+        protected override void DoButtons(Rect icon) {
+            ExtraWidgets.ToggleButton(icon, ref copies, copiesIcons, copiesTips);
+        }
 
         public override void ExposeData() {
             base.ExposeData();
             Scribe_Values.Look(ref copies, "copies");
+        }
+
+        private class NullAction : RuleAction {
+            public NullAction() : base(false, "(select)", null) {}
+
+            public override MenuNode Apply(BillMenuEntry entry, MenuNode parent, MenuNode root) => parent;
+            public override RuleAction Copy() => this;
         }
     }
 }

@@ -7,7 +7,7 @@ using UnityEngine;
 using Verse;
 
 namespace CategorizedBillMenus {
-    public abstract class ComparisonValue : Registerable<ComparisonValue>, ISettingsEntry {
+    public abstract class ComparisonValue : Registerable<ComparisonValue> {
         public static string AlwaysMatchMarker = Comparison.AlwaysMatchMarker;
 
         public ComparisonValue(string name, string description) 
@@ -24,6 +24,6 @@ namespace CategorizedBillMenus {
         public virtual bool Compare(Comparison comparison, BillMenuEntry entry, MenuNode parent, string expected) 
             => comparison.Compare(Get(entry, parent), expected);
 
-        public virtual void DoSettings(WidgetRow row, Rect rect, ref float curY) { }
+        public virtual void DoSettings(WidgetRow row, Rect rect, ref float curY) {}
     }
 }

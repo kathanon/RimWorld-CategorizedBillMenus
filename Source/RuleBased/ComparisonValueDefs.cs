@@ -1,8 +1,10 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using Verse;
 
 namespace CategorizedBillMenus {
@@ -46,6 +48,11 @@ namespace CategorizedBillMenus {
 
         public override string Get(BillMenuEntry entry)
             => GetAll(entry).FirstOrDefault();
+
+        public override void DoSettings(WidgetRow row, Rect rect, ref float curY) {
+            row.SelectMenuButton(combiners[index], combiners, i => index = i, c => c.name);
+            base.DoSettings(row, rect, ref curY);
+        }
 
         public override void ExposeData() {
             base.ExposeData();

@@ -12,6 +12,6 @@ namespace CategorizedBillMenus {
 
         string Description { get; }
 
-        void DoSettings(WidgetRow row, Rect rect, ref float curY);
+        void DoSettings(WidgetRow row, Rect rect, ref float curY, bool buttons = true);
     }
 }

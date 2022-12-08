@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using Verse;
 
 namespace CategorizedBillMenus {
@@ -37,6 +38,10 @@ namespace CategorizedBillMenus {
         public override string Get(BillMenuEntry entry) => Getter(GetDef(entry));
 
         public override string Get(BillMenuEntry entry, MenuNode parent) => Get(entry);
+
+        public override void DoSettings(WidgetRow row, Rect rect, ref float curY) {
+            row.SelectMenuButton(getters[index], getters, i => index = i, g => g.name);
+        }
 
         public override void ExposeData() {
             base.ExposeData();

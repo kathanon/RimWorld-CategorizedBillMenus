@@ -113,6 +113,7 @@ namespace CategorizedBillMenus {
         public const float CheckMargin  = 10f + CheckboxSize;
         public static readonly Color TitleHRColor = Color.gray;
 
+        private bool generalOpen = true;
         private bool subMenusOpen = true;
         private float height = 0f;
         private Vector2 scroll = Vector2.zero;
@@ -133,13 +134,10 @@ namespace CategorizedBillMenus {
             var align = Text.Anchor;
             Text.Anchor = TextAnchor.MiddleLeft;
             float curY = rect.y;
-            DoFavorites(rect, ref curY);
 
-            var row = new Rect(rect.x, curY, rect.width, CheckboxSize);
-            Widgets.CheckboxLabeled(row, Strings.CollapseOption, ref collapse, placeCheckboxNearText: true);
-            curY += CheckboxSize + Margin;
-
-            // TODO: Any additional general options here
+            if (FoldableSection(rect, Strings.GeneralTitle, Strings.GeneralTooltip, ref generalOpen, ref curY)) {
+                DoGeneral(rect, ref curY);
+            }
 
             if (FoldableSection(rect, Strings.SubMenusTitle, Strings.SubMenusTooltip, ref subMenusOpen, ref curY)) {
                 DoSubMenus(rect, widthScroll, ref curY);
@@ -152,6 +150,16 @@ namespace CategorizedBillMenus {
             if (doScroll) {
                 Widgets.EndScrollView();
             }
+        }
+
+        private void DoGeneral(Rect rect, ref float curY) {
+            DoFavorites(rect, ref curY);
+
+            var row = new Rect(rect.x, curY, rect.width, CheckboxSize);
+            Widgets.CheckboxLabeled(row, Strings.CollapseOption, ref collapse, placeCheckboxNearText: true);
+            curY += CheckboxSize + Margin;
+
+            // TODO: Any additional general options here
         }
 
         private void DoFavorites(Rect rect, ref float curY) {

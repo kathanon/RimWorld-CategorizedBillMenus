@@ -63,9 +63,11 @@ namespace CategorizedBillMenus {
 
         protected virtual IEnumerable<T> SubOptions(int level) => Enumerable.Empty<T>();
 
-        public static void AddMenu(List<T> list) => SelectionMenu(list.Add);
+        public static void AddMenu(List<T> list) => SelectionMenu(c => list.Add(c.Copy()));
 
         public abstract T Copy();
+
+        public virtual void CopyFrom(T from) {}
 
         public void DoName(Rect rect, bool edit) {
             if (edit && editable) {

@@ -13,5 +13,6 @@ namespace CategorizedBillMenus {
 
         public static readonly Texture2D FavIcon   = ContentFinder<Texture2D>.Get(Prefix + "FavIcon");
         public static readonly Texture2D EditIcon  = ContentFinder<Texture2D>.Get(Prefix + "EditIcon");
+        public static readonly Texture2D NoIcon    = ContentFinder<Texture2D>.Get(Prefix + "NoIcon");
     }
 }

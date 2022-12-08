@@ -1,35 +1,117 @@
 ﻿using FloatSubMenus;
+using Ionic.Zlib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 using Verse.Noise;
-using static CategorizedBillMenus.ExtraWidgets;
 
 namespace CategorizedBillMenus {
     public static class ExtraWidgets {
+        public const float TextFieldExtra = 6f;
         public const float IconSize = Settings.IconSize;
         public const float Margin   = Settings.Margin;
         public const float IconStep = IconSize + Margin;
+        public const float IconMid  = IconSize / 2;
 
-        public static void MenuButton(this WidgetRow row, ISettingsEntry cur, Action menu) {
-            if (row.ButtonText(cur?.Name ?? "(select)", cur?.Description)) {
-                menu();
+        public static void ToggleButton(
+                Rect rect, ref bool value, Texture2D[] icons, string[] tips, Texture2D button = null, float iconXAdj = 0f) {
+            int i = value ? 1 : 0;
+            TooltipHandler.TipRegion(rect, tips[i]);
+            Texture2D overlay = icons[i];
+            if (button == null) {
+                button = overlay;
+                overlay = null;
+            }
+            if (Widgets.ButtonImage((iconXAdj == 0) ? rect : rect.ExpandedBy(iconXAdj, 0f), button)) {
+                value = !value;
+            }
+            if (overlay != null) {
+                Widgets.DrawTextureFitted(rect, overlay, 1f);
             }
         }
 
-        public static void SelectMenu<T>(IEnumerable<T> list, Func<T,string> label, Action<T> set) {
-            var menu = list.Select(elem => new FloatMenuOption(label(elem), () => set(elem)));
+
+        public static bool TextField(
+                this WidgetRow row, ref string text, float min = 80f, float max = 120f) {
+            float curY = 0f;
+            return TextField(row, ref text, ref curY, min, max);
+        }
+
+        public static bool TextField(
+                this WidgetRow row, ref string text, ref float curY, float min = 80f, float max = 120f) {
+            var width = Mathf.Clamp(Text.CalcSize(text).x + TextFieldExtra, min, max);
+            var r = row.ButtonRect(text, width - WidgetRow.ButtonExtraSpace);
+            r.height -= WidgetRow.LabelGap;
+            var old = text;
+            text = Widgets.TextField(r, text);
+            curY = r.yMax + Margin;
+            return old != text;
+        }
+
+        // TODO: If you switch something out, and the new one has some of the same fields,
+        //       we should copy the values. Not sure if that should be done here or not.
+
+        public static void SelectMenuButton<T>(
+                this WidgetRow row, T cur, IEnumerable<T> list, Action<T> set, 
+                Func<T, string> label, Func<T, string> description = null) {
+            if (row.SelectButton(cur, label, description)) {
+                SelectMenu(list, set, label, description);
+            }
+        }
+
+        public static void SelectMenuButton<T>(
+                this WidgetRow row, T cur, IEnumerable<T> list, Action<int> set, 
+                Func<T, string> label, Func<T, string> description = null) {
+            if (row.SelectButton(cur, label, description)) {
+                SelectMenu(list, set, label, description);
+            }
+        }
+
+        public static void SelectMenuButton<T>(this WidgetRow row, T cur, Action<T> set) 
+                where T : Registerable<T> {
+            if (row.SelectButton(cur, e => e?.Name, e => e?.Description)) {
+                Registerable<T>.SelectionMenu(LocalSet, cur);
+            }
+
+            void LocalSet(T item) {
+                item = item.Copy();
+                if (cur != null) item.CopyFrom(cur);
+                set(item);
+            }
+        }
+
+        private static bool SelectButton<T>(
+                this WidgetRow row, T cur, Func<T, string> label, Func<T, string> description = null) 
+            => row.ButtonText(label(cur) ?? "(select)", description?.Invoke(cur));
+
+        public static void SelectMenu(
+                IEnumerable<ISettingsEntry> list, Action<ISettingsEntry> set) 
+            => SelectMenu(list, (e, _) => set(e), e => e.Name, e => e.Description);
+
+        public static void SelectMenu<T>(
+                IEnumerable<T> list, Action<T> set, Func<T, string> label, Func<T, string> description = null) 
+            => SelectMenu(list, (e, _) => set(e), label, description);
+
+        public static void SelectMenu<T>(
+                IEnumerable<T> list, Action<int> set, Func<T, string> label, Func<T, string> description = null)
+            => SelectMenu(list, (_, i) => set(i), label, description);
+
+        private static void SelectMenu<T>(
+                IEnumerable<T> list, Action<T,int> set, Func<T, string> label, Func<T, string> description) {
+            var menu = list.Select((elem, i) => new FloatMenuOption(
+                label:              label(elem),
+                action:             () => set(elem, i),
+                mouseoverGuiAction: ToolTip(description?.Invoke(elem))));
             Find.WindowStack.Add(new FloatMenu(menu.ToList()));
         }
 
-        public static void SelectMenu<T>(IEnumerable<T> list, Func<T, string> label, Action<T, int> set) {
-            var menu = list.Select((elem, i) => new FloatMenuOption(label(elem), () => set(elem, i)));
-            Find.WindowStack.Add(new FloatMenu(menu.ToList()));
-        }
+        private static Action<Rect> ToolTip(string tip) 
+            => (tip == null) ? (Action<Rect>) null : (Rect r) => TooltipHandler.TipRegion(r, tip);
 
         public delegate void DoListItem<T>(T item, Rect rect, float offset, ref float curY);
         public delegate void DoListItemIndirect<T>(T item, Action<float> doButtons, Rect rect, float offset, ref float curY);
@@ -81,10 +163,15 @@ namespace CategorizedBillMenus {
 
                 // Render the item
                 if (doItem != null) {
-                    DoButtons(curY + IconSize / 2);
+                    DoButtons(curY + IconMid);
                     doItem(list[i], rect, offset, ref curY);
                 } else {
                     doItemIndirect(list[i], DoButtons, rect, offset, ref curY);
+                }
+
+                // Minimum step
+                if (curY < prevY + IconStep) {
+                    curY = prevY + IconStep;
                 }
             }
 
@@ -121,7 +208,7 @@ namespace CategorizedBillMenus {
             }
 
             void DoButtons(float midY) {
-                plusMinus.y = handle.y = midY - IconSize / 2;
+                plusMinus.y = handle.y = midY - IconMid;
 
                 // Remove button
                 if (Widgets.ButtonImage(plusMinus, TexButton.Minus)) {

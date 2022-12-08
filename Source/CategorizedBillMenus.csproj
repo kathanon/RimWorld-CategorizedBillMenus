@@ -69,6 +69,8 @@
     <Compile Include="Categorizers\CategorizerSingleton.cs" />
     <Compile Include="RuleBased\CategoryRule.cs" />
     <Compile Include="CheckValue.cs" />
+    <Compile Include="RuleBased\RuleActionNamed.cs" />
+    <Compile Include="RuleBased\RulePart.cs" />
     <Compile Include="Settings\IReorderableItem.cs" />
     <Compile Include="Settings\ExtraWidgets.cs" />
     <Compile Include="MenuNode.cs" />

@@ -55,21 +55,30 @@ namespace CategorizedBillMenus {
             return res;
         }
 
+        public override void CopyFrom(RuleCondition from) {
+            base.CopyFrom(from);
+            if (from is RuleConditionComposite comp) {
+                parts = comp.parts;
+            }
+        }
+
         public override bool Test(BillMenuEntry entry, bool first) 
             => Combine(parts.Select(c => c.Test(entry, first)));
 
         public override bool Test(BillMenuEntry entry, MenuNode parent) 
             => Combine(parts.Select(c => c.Test(entry, parent)));
 
-        public override void DoSettings(WidgetRow _, Rect rect, ref float curY) {
+        protected override void DoSettingsLocal(WidgetRow prevRow, Rect rect, ref float curY) {
+            var nextY = prevRow.FinalY + RowHeight;
+            if (nextY > curY) curY = nextY;
             var row = new WidgetRow();
-            if (parts == null) parts = new List<RuleCondition>();
+            int i = 0;
             ExtraWidgets.EditableList(parts, () => AddMenu(parts), DoItem, rect, ref curY);
 
             void DoItem(RuleCondition item, Rect r, float offset, ref float y) {
                 row.Init(r.x, y, Dir, r.width, Margin / 2);
-                row.MenuButton(item, () => SelectionMenu(c => parts.Replace(item, c), item));
-                item.DoSettings(row, r, ref y);
+                row.SelectMenuButton(item, c => parts[i] = c);
+                item.DoSettings(row, r, ref y, false);
             }
         }
 
