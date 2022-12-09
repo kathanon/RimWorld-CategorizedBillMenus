@@ -12,17 +12,18 @@ namespace CategorizedBillMenus {
         private List<(string name, Func<T, string> get)> getters;
         private int index;
 
-        protected ComparisonValueDef(string name, string description, params (string name, Func<T, string> get)[] getters) 
-            : base(name, description) {
+        protected ComparisonValueDef(string name, string description, int getterIndex = 0, 
+                params (string name, Func<T, string> get)[] getters) 
+                : base(name, description) {
             this.getters = new List<(string name, Func<T, string> get)> {
                 ( "label",    d => d.label ),
-                ( "def name", d => d.defName ),
+                ( "def-name", d => d.defName ),
             };
             this.getters.AddRange(getters);
-            index = 0;
+            index = getterIndex;
         }
 
-        protected ComparisonValueDef(string name, string description, int _) 
+        protected ComparisonValueDef(string name, string description, float _) 
             : base(name, description) {}
 
         protected ComparisonValueDef<T> CopyTo(ComparisonValueDef<T> other) {
@@ -33,6 +34,8 @@ namespace CategorizedBillMenus {
 
         protected Func<T, string> Getter => getters[index].get;
 
+        protected string GetterName => getters[index].name;
+
         protected abstract T GetDef(BillMenuEntry entry);
 
         public override string Get(BillMenuEntry entry) => Getter(GetDef(entry));
@@ -42,6 +45,8 @@ namespace CategorizedBillMenus {
         public override void DoSettings(WidgetRow row, Rect rect, ref float curY) {
             row.SelectMenuButton(getters[index], getters, i => index = i, g => g.name);
         }
+
+        public override string SettingsClosedLabel => $"{Name} {GetterName}";
 
         public override void ExposeData() {
             base.ExposeData();

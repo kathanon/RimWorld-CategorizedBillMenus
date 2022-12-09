@@ -15,15 +15,17 @@ namespace CategorizedBillMenus {
         public const string SubMenusTooltip = "Configure what sub-menus are generated.";
         public const string CategoriesTitle = "Included categories";
         public const string CategoriesTooltip = "Uncheck any categories that should not be used in menus."; //TODO: improve
-        public const string OpenTooltip = "Collapse section";
-        public const string ClosedTooltip = "Expand section";
+        public const string OpenTooltip = "Collapse";
+        public const string ClosedTooltip = "Expand";
         public const string CollapseOption = "Collapse sub-menus with only one item";
         public const string NoBodyPartCat = "Whole body";
 
         public const string RuleBasedName = "Rule-based";
         public const string RuleBasedDesc = "Applies an editable list of simple rules.";
-        public const string ByBodyPartName = "Medical - By Body Part";
-        public const string ByBodyPartDesc = "Organizes operation bills after what body part they apply to.";
+        public const string ByLimbName = "Medical - By Body Part";
+        public const string ByLimbDesc = "Organizes operation bills after what body part they apply to.";
+        public const string ByTypeName = "Medical - By Type";
+        public const string ByTypeDesc = "Organizes operation bills after the type of procedure.";
         public const string ManualName = "Manual";
         public const string ManualDesc = "Freely reorder recipies and categories, as well as add new categories.";
         public const string DefaultName = "Thing categories";
@@ -42,6 +44,8 @@ namespace CategorizedBillMenus {
         public const string CondOrDesc = "Matches if any of the contained conditions matches.";
         public const string CondAndName = "all of";
         public const string CondAndDesc = "Matches if all of the contained conditions matches.";
+        public const string CondNotName = "not";
+        public const string CondNotDesc = "Matches if the contained condition does not match.";
 
         public static readonly string FavCat = "Favorites";
     }

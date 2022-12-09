@@ -1,22 +1,30 @@
-﻿using FloatSubMenus;
-using Ionic.Zlib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using Verse.Noise;
 
 namespace CategorizedBillMenus {
+    [StaticConstructorOnStartup]
     public static class ExtraWidgets {
         public const float TextFieldExtra = 6f;
         public const float IconSize = Settings.IconSize;
         public const float Margin   = Settings.Margin;
         public const float IconStep = IconSize + Margin;
         public const float IconMid  = IconSize / 2;
+
+        public static Texture2D[] collapseIcons = { TexButton.Reveal, TexButton.Collapse };
+        public static string[]    collapseTips  = { Strings.OpenTooltip, Strings.ClosedTooltip };
+
+        public static void ForceGap(this WidgetRow row, float width) {
+            if (width > 0f) {
+                row.ButtonRect(null, width - WidgetRow.ButtonExtraSpace);
+            }
+        }
+
+
+        public static void CollapseButton(Rect rect, ref bool open) 
+            => ToggleButton(rect, ref open, collapseIcons, collapseTips);
 
         public static void ToggleButton(
                 Rect rect, ref bool value, Texture2D[] icons, string[] tips, Texture2D button = null, float iconXAdj = 0f) {
@@ -140,10 +148,14 @@ namespace CategorizedBillMenus {
                                         ref float curY,
                                         bool reorder) {
             var dragging = ReferenceEquals(list, draggedList);
+            bool hasAdd = add != null;
             var plusMinus = new Rect(rect.x, curY, IconSize, IconSize);
             var handle = plusMinus;
-            handle.x += IconStep;
-            var offset = (reorder ? 2 : 1) * IconStep;
+            if (hasAdd) handle.x += IconStep;
+            int buttons = 0;
+            if (reorder) buttons++;
+            if (hasAdd) buttons++;
+            var offset = buttons * IconStep;
             rect.xMin += offset;
 
             // Get info on drag in progress
@@ -183,11 +195,13 @@ namespace CategorizedBillMenus {
             }
 
             // Add item button
-            plusMinus.y = curY;
-            if (Widgets.ButtonImage(plusMinus, TexButton.Plus)) {
-                add();
+            if (hasAdd) {
+                plusMinus.y = curY;
+                if (Widgets.ButtonImage(plusMinus, TexButton.Plus)) {
+                    add();
+                }
+                curY += IconStep;
             }
-            curY += IconStep;
 
             // Handle drop after drag
             if (dragging && Event.current.type == EventType.MouseUp && Event.current.button == 0) {
@@ -211,7 +225,7 @@ namespace CategorizedBillMenus {
                 plusMinus.y = handle.y = midY - IconMid;
 
                 // Remove button
-                if (Widgets.ButtonImage(plusMinus, TexButton.Minus)) {
+                if (hasAdd && Widgets.ButtonImage(plusMinus, TexButton.Minus)) {
                     remove = i;
                 }
 

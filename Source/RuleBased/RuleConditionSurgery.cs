@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,7 @@ namespace CategorizedBillMenus {
             Register(new RuleConditionSurgery());
         }
 
-        public RuleConditionSurgery() : base(Strings.CondSurgeryName, Strings.CondSurgeryDesc) {
-        }
+        public RuleConditionSurgery() : base(Strings.CondSurgeryName, Strings.CondSurgeryDesc) {}
 
         public readonly static RuleConditionSurgery Instance = new RuleConditionSurgery();
 

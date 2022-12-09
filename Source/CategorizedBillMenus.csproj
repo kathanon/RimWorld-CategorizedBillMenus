@@ -15,6 +15,7 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <!-- Import base build file -->
   <Import Project="RimWorld.targets" />
@@ -69,12 +70,14 @@
     <Compile Include="Categorizers\CategorizerSingleton.cs" />
     <Compile Include="RuleBased\CategoryRule.cs" />
     <Compile Include="CheckValue.cs" />
+    <Compile Include="RuleBased\ComparisonValueResearch.cs" />
     <Compile Include="RuleBased\RuleActionNamed.cs" />
+    <Compile Include="RuleBased\RuleActionNoop.cs" />
     <Compile Include="RuleBased\RulePart.cs" />
     <Compile Include="Settings\IReorderableItem.cs" />
     <Compile Include="Settings\ExtraWidgets.cs" />
     <Compile Include="MenuNode.cs" />
-    <Compile Include="RuleBased\Comparison.cs" />
+    <Compile Include="RuleBased\ComparisonOperation.cs" />
     <Compile Include="RuleBased\ComparisonValue.cs" />
     <Compile Include="RuleBased\ComparisonValueDef.cs" />
     <Compile Include="RuleBased\ComparisonValueDefs.cs" />
@@ -86,7 +89,7 @@
     <Compile Include="RuleBased\RuleActionExtra.cs" />
     <Compile Include="RuleBased\RuleActionByResearch.cs" />
     <Compile Include="RuleBased\RuleCondition.cs" />
-    <Compile Include="RuleBased\RuleConditionComparison.cs" />
+    <Compile Include="RuleBased\RuleConditionText.cs" />
     <Compile Include="RuleBased\RuleConditionComposite.cs" />
     <Compile Include="RuleBased\RuleConditionSurgery.cs" />
     <Compile Include="Registerable.cs" />

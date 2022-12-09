@@ -17,7 +17,11 @@ namespace CategorizedBillMenus {
 
         protected RulePart(string name, string description) : base(name, description) {}
 
-        protected virtual void DoSettingsLocal(WidgetRow row, Rect rect, ref float curY) {}
+        protected virtual void DoSettingsOpen(WidgetRow row, Rect rect, ref float curY) {}
+
+        public virtual string SettingsClosedLabel => Name;
+
+        public abstract int NumToggles { get; }
 
         protected abstract void DoButtons(Rect icon);
 
@@ -25,7 +29,7 @@ namespace CategorizedBillMenus {
             if (buttons) {
                 DoButtons(new Rect(rect.x, curY + RuleIconYAdj, RuleIconSize, RuleIconSize));
             }
-            DoSettingsLocal(row, rect, ref curY);
+            DoSettingsOpen(row, rect, ref curY);
             var y = row.FinalY + RowHeight;
             if (y > curY) curY = y;
         }

@@ -266,10 +266,7 @@ namespace CategorizedBillMenus {
             curY += titleHeight + TitleMargin;
 
             var arrowRect = new Rect(rect.x, midY - ArrowSize / 2f, ArrowSize, ArrowSize);
-            TooltipHandler.TipRegion(arrowRect, open ? Strings.OpenTooltip : Strings.ClosedTooltip);
-            if (Widgets.ButtonImage(arrowRect, open ? TexButton.Collapse : TexButton.Reveal)) {
-                open = !open;
-            }
+            ExtraWidgets.CollapseButton(arrowRect, ref open);
 
             float titleX = arrowRect.xMax + TitleMargin;
             var titleRect = new Rect(titleX, midY - size.y / 2f, Mathf.Min(rect.xMax - titleX, size.x + 2f), size.y);

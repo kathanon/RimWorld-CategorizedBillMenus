@@ -18,11 +18,17 @@ namespace CategorizedBillMenus {
 
         private int index = 0;
 
-        protected ComparisonValueDefs(string name, string description, params (string name, Func<T, string> get)[] getters) 
-            : base(name, description, getters) {}
+        protected ComparisonValueDefs(string name,
+                                      string description,
+                                      int combinerIndex = 0,
+                                      int getterIndex = 0,
+                                      params (string name, Func<T, string> get)[] getters)
+                : base(name, description, getterIndex, getters) {
+            index = combinerIndex;
+        }
 
-        protected ComparisonValueDefs(string name, string description, int _) 
-            : base(name, description, _) {}
+        protected ComparisonValueDefs(string name, string description, float _) 
+            : base(name, description, 0f) {}
 
         protected ComparisonValueDefs<T> CopyTo(ComparisonValueDefs<T> other) {
             other.index = index;
@@ -32,10 +38,12 @@ namespace CategorizedBillMenus {
 
         protected CombinerFunc Combiner => combiners[index].func;
 
-        public override bool Compare(Comparison comparison, BillMenuEntry entry, string expected)
+        protected string CombinerName => combiners[index].name;
+
+        public override bool Compare(ComparisonOperation comparison, BillMenuEntry entry, string expected)
             => Combiner(GetAll(entry), s => comparison.Compare(s, expected));
 
-        public override bool Compare(Comparison comparison, BillMenuEntry entry, MenuNode parent, string expected)
+        public override bool Compare(ComparisonOperation comparison, BillMenuEntry entry, MenuNode parent, string expected)
             => true; // If first variant returned true, then this should as well
 
         protected override T GetDef(BillMenuEntry entry) 
@@ -53,6 +61,8 @@ namespace CategorizedBillMenus {
             row.SelectMenuButton(combiners[index], combiners, i => index = i, c => c.name);
             base.DoSettings(row, rect, ref curY);
         }
+
+        public override string SettingsClosedLabel => $"{Name} {CombinerName} {GetterName}";
 
         public override void ExposeData() {
             base.ExposeData();

@@ -18,7 +18,10 @@ namespace CategorizedBillMenus {
         public RuleConditionOr()
             : base(Strings.CondOrName, Strings.CondOrDesc) { }
 
-        protected override RuleConditionComposite Create() => new RuleConditionOr();
+        public RuleConditionOr(params RuleCondition[] initial)
+            : base(Strings.CondOrName, Strings.CondOrDesc, true, initial) { }
+
+        public override RuleCondition Copy() => new RuleConditionOr();
 
         protected override bool Combine(IEnumerable<bool> values) => values.Any(v => v);
     }
@@ -33,27 +36,56 @@ namespace CategorizedBillMenus {
         public RuleConditionAnd()
             : base(Strings.CondAndName, Strings.CondAndDesc) { }
 
-        protected override RuleConditionComposite Create() => new RuleConditionAnd();
+        public RuleConditionAnd(params RuleCondition[] initial)
+            : base(Strings.CondAndName, Strings.CondAndDesc, true, initial) { }
+
+        public override RuleCondition Copy() => new RuleConditionAnd();
 
         protected override bool Combine(IEnumerable<bool> values) => values.All(v => v);
     }
 
 
+    [StaticConstructorOnStartup]
+    public class RuleConditionNot : RuleConditionComposite {
+        static RuleConditionNot() {
+            Register(new RuleConditionNot());
+        }
+
+        public RuleConditionNot()
+            : base(Strings.CondNotName, Strings.CondNotDesc, false) { }
+
+        public RuleConditionNot(params RuleCondition[] initial)
+            : base(Strings.CondNotName, Strings.CondNotDesc, false, initial) { }
+
+        public override RuleCondition Copy() => new RuleConditionNot();
+
+        protected override bool Combine(IEnumerable<bool> values) 
+            => parts[0] != null && !values.Any(v => v);
+    }
+
+
     public abstract class RuleConditionComposite : RuleCondition {
         protected List<RuleCondition> parts = new List<RuleCondition>();
+        private readonly bool multiple;
 
-        protected RuleConditionComposite(string name, string description) 
-            : base(name, description) {}
+        protected RuleConditionComposite(string name, string description, bool multiple = true) 
+                : base(name, description) {
+            this.multiple = multiple;
+            if (!multiple) parts.Add(null);
+        }
+
+        protected RuleConditionComposite(
+                string name, string description, bool multiple = true,
+                params RuleCondition[] initial) 
+                : base(name, description) {
+            this.multiple = multiple;
+            parts.AddRange(initial);
+            if (!multiple && parts.Count == 0) {
+                parts.Add(null);
+            }
+        }
 
         protected abstract bool Combine(IEnumerable<bool> values);
-
-        protected abstract RuleConditionComposite Create();
-
-        public override RuleCondition Copy() {
-            var res = Create();
-            res.parts.AddRange(parts.Select(c => c.Copy()));
-            return res;
-        }
 
         public override void CopyFrom(RuleCondition from) {
             base.CopyFrom(from);
@@ -63,24 +95,30 @@ namespace CategorizedBillMenus {
         }
 
         public override bool Test(BillMenuEntry entry, bool first) 
-            => Combine(parts.Select(c => c.Test(entry, first)));
+            => Combine(parts.Select(c => c?.Test(entry, first) ?? false));
 
         public override bool Test(BillMenuEntry entry, MenuNode parent) 
-            => Combine(parts.Select(c => c.Test(entry, parent)));
+            => Combine(parts.Select(c => c?.Test(entry, parent) ?? false));
 
-        protected override void DoSettingsLocal(WidgetRow prevRow, Rect rect, ref float curY) {
+        protected override void DoSettingsOpen(WidgetRow prevRow, Rect rect, ref float curY) {
             var nextY = prevRow.FinalY + RowHeight;
             if (nextY > curY) curY = nextY;
             var row = new WidgetRow();
             int i = 0;
-            ExtraWidgets.EditableList(parts, () => AddMenu(parts), DoItem, rect, ref curY);
+            Action add = null;
+            if (multiple) add = () => AddMenu(parts);
+            ExtraWidgets.EditableList(parts, add, DoItem, rect, ref curY);
 
             void DoItem(RuleCondition item, Rect r, float offset, ref float y) {
                 row.Init(r.x, y, Dir, r.width, Margin / 2);
                 row.SelectMenuButton(item, c => parts[i] = c);
-                item.DoSettings(row, r, ref y, false);
+                item?.DoSettings(row, r, ref y, false);
             }
         }
+
+        public override string SettingsClosedLabel 
+            => multiple ? $"{Name}... ({parts.Count} conditions)" 
+                        : $"{Name} {parts[0]?.SettingsClosedLabel ?? "-"}";
 
         public override void ExposeData() {
             base.ExposeData();

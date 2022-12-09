@@ -18,18 +18,21 @@ namespace CategorizedBillMenus {
         public const float RowHeight     = CheckboxSize + Margin;
         public const float RuleIconYAdj  = (CheckboxSize - RuleIconSize) / 2;
         public const float RuleIconSpace = RuleIconSize + SmallMargin;
-        public const float SkipAdjust    = SmallMargin + WidgetRow.ButtonExtraSpace;
+
+        public const string ConditionPrefix = "If";
+        public const string ActionPrefix = "then";
+        public const UIDirection Dir = UIDirection.RightThenDown;
 
         private static readonly string[] allowAfterTips = {
             "And then continue applying rules.",
             "And then stop applying rules."
         };
 
-        public const UIDirection Dir = UIDirection.RightThenDown;
-
         private RuleCondition condition;
         private RuleAction action;
         private bool allowAfter;
+
+        private bool open = true;
 
         public bool AllowAfter { 
             get => allowAfter; 
@@ -70,29 +73,45 @@ namespace CategorizedBillMenus {
         }
 
         public void DoSettings(Rect rect, ref float curY) {
-            float width = (rect.width - Margin) / 2;
+            float width = (rect.width + Margin) / 2;
             var row = new WidgetRow();
             float y1 = curY, y2 = curY;
 
-            var subRect = rect.LeftPartPixels(width);
-            DoPart(condition, c => condition = c, "If recipe", row, subRect, 2, ref y1);
+            var arrowRect = new Rect(rect.x, curY + RuleIconYAdj, RuleIconSize, RuleIconSize);
+            ExtraWidgets.CollapseButton(arrowRect, ref open);
 
-            subRect.x = (y1 > curY) ? rect.x + width + Margin : row.FinalX;
-            subRect.xMax = rect.xMax - RuleIconSpace;
-            DoPart(action, a => action = a, "then apply", row, subRect, 1, ref y2);
+            if (open) {
+                // TODO: show icons for new rule - maybe null object?
+                var subRect = rect.LeftPartPixels(width);
+                DoPart(condition, c => condition = c, ConditionPrefix, row, subRect, ref y1, 1);
 
-            var after = new Rect(rect.xMax - RuleIconSize, curY + RuleIconYAdj, RuleIconSize, RuleIconSize);
-            ExtraWidgets.ToggleButton(
-                after, ref allowAfter, TexButton.SpeedButtonTextures, allowAfterTips, iconXAdj: RuleIconSize / 3);
+                subRect.x = (y1 > curY) ? rect.x + width + Margin : row.FinalX;
+                subRect.xMax = rect.xMax - RuleIconSpace;
+                DoPart(action, a => action = a, ActionPrefix, row, subRect, ref y2);
 
-            curY = Mathf.Max(y1, y2);
+                var after = new Rect(rect.xMax - RuleIconSize, curY + RuleIconYAdj, RuleIconSize, RuleIconSize);
+                ExtraWidgets.ToggleButton(
+                    after, ref allowAfter, TexButton.SpeedButtonTextures, allowAfterTips, iconXAdj: RuleIconSize / 3);
+
+                curY = Mathf.Max(y1, y2);
+            } else {
+                var textRect = new Rect(rect.x + RuleIconSpace, curY, rect.width - RuleIconSpace, CheckboxSize);
+                string conditionText = condition?.SettingsClosedLabel ?? "-";
+                string actionText = action?.SettingsClosedLabel ?? "-";
+                string text = $"{ConditionPrefix} {conditionText} {ActionPrefix} {actionText}";
+                Widgets.Label(textRect, text);
+
+            }
         }
 
         private void DoPart<T>(
-                T cur, Action<T> set, string label, WidgetRow row, Rect rect, int buttons, ref float curY) 
+                T cur, Action<T> set, string label, WidgetRow row, Rect rect, ref float curY, int buttons = 0) 
                 where T : RulePart<T> {
             row.Init(rect.x, curY, Dir, rect.width, Margin / 2);
-            row.ButtonRect(null, buttons * RuleIconSpace - SkipAdjust); // Add space for toggle icons
+            buttons += cur?.NumToggles ?? 0;
+            if (buttons > 0) {
+                row.ForceGap(buttons * RuleIconSpace - SmallMargin); // Add space for toggle icons
+            }
             row.Label(label);
             row.Gap(Margin - 2f);
             row.SelectMenuButton(cur, set);

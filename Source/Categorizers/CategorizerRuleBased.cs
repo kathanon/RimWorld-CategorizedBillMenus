@@ -10,6 +10,11 @@ using Verse.Noise;
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
     public class CategorizerRuleBased : CategorizerEditable {
+        private const int Any   = 0;
+        private const int All   = 1;
+        private const int Label = 0;
+        private const int Def   = 1;
+
         static CategorizerRuleBased() {
             Register(new CategorizerRuleBased());
         }
@@ -22,12 +27,69 @@ namespace CategorizedBillMenus {
                 new List<CategoryRule> {
                     new CategoryRule(RuleConditionSurgery.Instance, new RuleActionByLimb()),
                 },
-                Strings.ByBodyPartName,
-                Strings.ByBodyPartDesc);
+                Strings.ByLimbName,
+                Strings.ByLimbDesc);
+
+        public static readonly CategorizerRuleBased PresetByType =
+new CategorizerRuleBased(
+new List<CategoryRule> {
+    new CategoryRule(
+        new RuleConditionNot(RuleConditionSurgery.Instance), 
+        RuleActionNoop.Instance),
+    new CategoryRule(
+        new RuleConditionOr(
+            new RuleConditionText(
+                new ComparisonValueIngredient(Any, Label), 
+                Comparison.Equals,
+                "Wood"), 
+            new RuleConditionText(
+                new ComparisonValueRecipe(Label), 
+                Comparison.Contains,
+                "denture")), 
+        new RuleActionNamed("Primitive")),
+    new CategoryRule(
+        new RuleConditionText(
+            new ComparisonValueIngredient(Any, Label),
+            Comparison.Contains,
+            "Bionic"),
+        new RuleActionNamed("Bionic")),
+    new CategoryRule(
+        new RuleConditionText(
+            new ComparisonValueRecipe(Label),
+            Comparison.Contains,
+            "Administer"),
+        new RuleActionNamed("Drugs")),
+    new CategoryRule(
+        new RuleConditionText(
+            new ComparisonValueIngredient(Any, Def),
+            Comparison.Contains,
+            "Prosthetic"),
+        new RuleActionNamed("Prosthetic")),
+    new CategoryRule(
+        new RuleConditionOr(
+            new RuleConditionText(
+                new ComparisonValueResearch(Any, Def), 
+                Comparison.Equals,
+                "FertilityProcedures"), 
+            new RuleConditionText(
+                new ComparisonValueRecipe(Def), 
+                Comparison.Equals,
+                "TerminatePregnancy")), 
+        new RuleActionNamed("Fertility")),
+    new CategoryRule(
+        new RuleConditionText(
+            new ComparisonValueRecipe(Def),
+            Comparison.Equals,
+            "RemoveBodyPart"),
+        new RuleActionNamed("Harvest / Amputate")),
+},
+Strings.ByTypeName,
+Strings.ByTypeDesc);
 
         protected override IEnumerable<Categorizer> SubOptions(int level) {
             if (level == 0) {
                 yield return this;
+                yield return PresetByType;
                 yield return PresetByLimb;
             }
         }
@@ -83,8 +145,8 @@ namespace CategorizedBillMenus {
 
         public override Categorizer Copy() 
             => new CategorizerRuleBased(rules.Select(r => r.Copy()).ToList(),
-                                        Strings.ByBodyPartName,
-                                        Strings.ByBodyPartDesc);
+                                        Strings.ByLimbName,
+                                        Strings.ByLimbDesc);
 
         public override void DoSettings(Rect rect, float _, ref float curY) {
             rect.xMin += IconSize + Margin;

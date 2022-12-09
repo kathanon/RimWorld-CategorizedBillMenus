@@ -27,6 +27,10 @@ namespace CategorizedBillMenus {
 
         public bool Copies => copies;
 
+        protected virtual bool FixedCopies => false;
+
+        public override int NumToggles => FixedCopies ? 0 : 1;
+
         public override void CopyFrom(RuleAction from) {
             copies = from.copies;
         }
@@ -34,7 +38,9 @@ namespace CategorizedBillMenus {
         public abstract MenuNode Apply(BillMenuEntry entry, MenuNode parent, MenuNode root);
 
         protected override void DoButtons(Rect icon) {
-            ExtraWidgets.ToggleButton(icon, ref copies, copiesIcons, copiesTips);
+            if (!FixedCopies) {
+                ExtraWidgets.ToggleButton(icon, ref copies, copiesIcons, copiesTips);
+            }
         }
 
         public override void ExposeData() {

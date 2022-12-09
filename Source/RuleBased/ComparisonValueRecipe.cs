@@ -17,9 +17,12 @@ namespace CategorizedBillMenus {
 
         public ComparisonValueRecipe() : base(ValueRecipeName, ValueRecipeDesc) {}
 
-        private ComparisonValueRecipe(int _) : base(ValueRecipeName, ValueRecipeDesc, 0) {}
+        public ComparisonValueRecipe(int getterIndex)
+            : base(ValueRecipeName, ValueRecipeDesc, getterIndex) { }
 
-        public override ComparisonValue Copy() => CopyTo(new ComparisonValueRecipe(0));
+        private ComparisonValueRecipe(float _) : base(ValueRecipeName, ValueRecipeDesc, 0f) {}
+
+        public override ComparisonValue Copy() => CopyTo(new ComparisonValueRecipe(0f));
 
         protected override RecipeDef GetDef(BillMenuEntry entry) => entry.Recipe;
     }

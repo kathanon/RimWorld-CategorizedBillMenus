@@ -36,11 +36,14 @@ namespace CategorizedBillMenus {
             onMoved = from.onMoved;
         }
 
+        public override int NumToggles => 2;
+
         public abstract bool Test(BillMenuEntry entry, bool first);
 
         public abstract bool Test(BillMenuEntry entry, MenuNode parent);
 
         protected override void DoButtons(Rect icon) {
+            icon.x += RuleIconSize + SmallMargin;
             ExtraWidgets.ToggleButton(icon, ref onCopied, overlayIcons, onCopiedTips, button: TexButton.Copy);
             icon.x += RuleIconSize + SmallMargin;
             ExtraWidgets.ToggleButton(icon, ref onMoved, overlayIcons, onMovedTips, button: TexButton.Paste);

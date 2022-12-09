@@ -15,11 +15,14 @@ namespace CategorizedBillMenus {
             Register(new ComparisonValueIngredient());
         }
 
-        public ComparisonValueIngredient() : base(ValueIngredientName, ValueIngredientDesc) {}
+        public ComparisonValueIngredient() : base(ValueIngredientName, ValueIngredientDesc) { }
 
-        private ComparisonValueIngredient(int _) : base(ValueIngredientName, ValueIngredientDesc, 0) {}
+        public ComparisonValueIngredient(int combinerIndex, int getterIndex)
+            : base(ValueIngredientName, ValueIngredientDesc, combinerIndex, getterIndex) { }
 
-        public override ComparisonValue Copy() => CopyTo(new ComparisonValueIngredient(0));
+        private ComparisonValueIngredient(float _) : base(ValueIngredientName, ValueIngredientDesc, 0f) {}
+
+        public override ComparisonValue Copy() => CopyTo(new ComparisonValueIngredient(0f));
 
         protected override IEnumerable<ThingDef> GetDefs(BillMenuEntry entry) 
             => entry.Recipe.ingredients.Where(i => i.IsFixedIngredient).Select(i => i.FixedIngredient);
@@ -35,9 +38,9 @@ namespace CategorizedBillMenus {
             Register(new ComparisonValueIngredientAll());
         }
 
-        public ComparisonValueIngredientAll() : base(ValueIngredientName, ValueIngredientDesc) {}
+        public ComparisonValueIngredientAll() : base(ValueIngredientName, ValueIngredientDesc) { }
 
-        private ComparisonValueIngredientAll(int _) : base(ValueIngredientName, ValueIngredientDesc, 0) {}
+        private ComparisonValueIngredientAll(int _) : base(ValueIngredientName, ValueIngredientDesc, getterIndex: 0) { }
 
         public override ComparisonValue Copy() => CopyTo(new ComparisonValueIngredientAll(0));
 

@@ -8,25 +8,35 @@ using Verse;
 
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
-    public class RuleConditionComparison : RuleCondition {
+    public class RuleConditionText : RuleCondition {
         private ComparisonValue value;
-        private Comparison comparison;
+        private ComparisonOperation comparison;
         private string expected;
 
-        static RuleConditionComparison() {
-            Register(new RuleConditionComparison());
+        static RuleConditionText() {
+            Register(new RuleConditionText());
         }
 
-        public RuleConditionComparison()
-            : base("compare", "Matches if the specified comparison is true.") { }
+        public RuleConditionText()
+            : base("text", "Compares the specified value to a given text.") { }
 
-        private RuleConditionComparison(RuleConditionComparison toCopy) : this() {
+        public RuleConditionText(ComparisonValue value, ComparisonOperation comparison, string expected)
+                : this() {
+            this.value = value;
+            this.comparison = comparison;
+            this.expected = expected;
+        }
+
+        public RuleConditionText(ComparisonValue value, Comparison comparison, string expected)
+                : this(value, ComparisonOperation.Of(comparison), expected) {}
+
+        private RuleConditionText(RuleConditionText toCopy) : this() {
             value = toCopy.value;
             comparison = toCopy.comparison;
             expected = toCopy.expected;
         }
 
-        public override RuleCondition Copy() => new RuleConditionComparison(this);
+        public override RuleCondition Copy() => new RuleConditionText(this);
 
         public bool Complete => comparison != null && value != null && !expected.NullOrEmpty();
 
@@ -36,13 +46,16 @@ namespace CategorizedBillMenus {
         public override bool Test(BillMenuEntry entry, MenuNode parent) 
             => Complete && value.Compare(comparison, entry, parent, expected);
 
-        protected override void DoSettingsLocal(WidgetRow row, Rect rect, ref float curY) {
+        protected override void DoSettingsOpen(WidgetRow row, Rect rect, ref float curY) {
             row.SelectMenuButton(value, v => value = v);
             value?.DoSettings(row, rect, ref curY);
             row.SelectMenuButton(comparison, c => comparison = c);
             comparison?.DoSettings(row, rect, ref curY);
             row.TextField(ref expected, ref curY);
         }
+
+        public override string SettingsClosedLabel 
+            => $"{Name} {value?.SettingsClosedLabel} {comparison?.SettingsClosedLabel} \"{expected}\"";
 
         public override void ExposeData() {
             base.ExposeData();
