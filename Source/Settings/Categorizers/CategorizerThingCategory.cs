@@ -43,7 +43,7 @@ namespace CategorizedBillMenus {
         public const float RowMargin    = Settings.RowMargin;
         public const float CheckMargin  = Settings.CheckMargin;
 
-        public CategorizerThingCategory() : base(Strings.DefaultName, Strings.DefaultDesc) {}
+        public CategorizerThingCategory() : base(Strings.CategoriesName, Strings.CategoriesDesc) {}
 
         public override bool AppliesTo(BillMenuEntry entry, bool first)
             => first && (entry.Recipe.ProducedThingDef?.thingCategories?.Any() ?? false);

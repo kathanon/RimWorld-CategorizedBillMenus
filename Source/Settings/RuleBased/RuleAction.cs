@@ -9,14 +9,10 @@ using Verse;
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
     public abstract class RuleAction : RulePart<RuleAction> {
-        private static readonly string[] copiesTips = {
-            "Moves the menu option to the new place.",
-            "Copies the menu option to the new place."
-        };
-        private static readonly Texture2D[] copiesIcons = {
-            TexButton.Paste,
-            TexButton.Copy
-        };
+        private static readonly string[] copiesTips 
+            = { Strings.CopyNoTip, Strings.CopyYesTip };
+        private static readonly Texture2D[] copiesIcons 
+            = { TexButton.Paste, TexButton.Copy };
 
         private bool copies;
 

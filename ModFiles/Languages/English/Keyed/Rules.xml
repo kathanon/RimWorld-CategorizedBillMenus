@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+   <kathanon.CategorizedBillMenus.ActionByLimbName>by body part</kathanon.CategorizedBillMenus.ActionByLimbName>
+   <kathanon.CategorizedBillMenus.ActionByLimbDesc>Sort operations based on the target body part</kathanon.CategorizedBillMenus.ActionByLimbDesc>
+   <kathanon.CategorizedBillMenus.ActionNamedName>add sub-menu</kathanon.CategorizedBillMenus.ActionNamedName>
+   <kathanon.CategorizedBillMenus.ActionNamedDesc>Add a custom sub-menu.</kathanon.CategorizedBillMenus.ActionNamedDesc>
+   <kathanon.CategorizedBillMenus.ActionByResearchName>by research</kathanon.CategorizedBillMenus.ActionByResearchName>
+   <kathanon.CategorizedBillMenus.ActionByResearchDesc>Sort by required research. If there are several, uses the first.</kathanon.CategorizedBillMenus.ActionByResearchDesc>
+   <kathanon.CategorizedBillMenus.ActionNoopName>nothing</kathanon.CategorizedBillMenus.ActionNoopName>
+   <kathanon.CategorizedBillMenus.ActionNoopDesc>Do nothing. This can be used to skip the remaining rules in the module.</kathanon.CategorizedBillMenus.ActionNoopDesc>
+
+   <kathanon.CategorizedBillMenus.CondSurgeryName>is operation</kathanon.CategorizedBillMenus.CondSurgeryName>
+   <kathanon.CategorizedBillMenus.CondSurgeryDesc>Matches all operation recipes</kathanon.CategorizedBillMenus.CondSurgeryDesc>
+   <kathanon.CategorizedBillMenus.CondOrName>any of</kathanon.CategorizedBillMenus.CondOrName>
+   <kathanon.CategorizedBillMenus.CondOrDesc>Matches if any of the contained conditions matches.</kathanon.CategorizedBillMenus.CondOrDesc>
+   <kathanon.CategorizedBillMenus.CondAndName>all of</kathanon.CategorizedBillMenus.CondAndName>
+   <kathanon.CategorizedBillMenus.CondAndDesc>Matches if all of the contained conditions matches.</kathanon.CategorizedBillMenus.CondAndDesc>
+   <kathanon.CategorizedBillMenus.CondNotName>not</kathanon.CategorizedBillMenus.CondNotName>
+   <kathanon.CategorizedBillMenus.CondNotDesc>Matches if the contained condition does not match.</kathanon.CategorizedBillMenus.CondNotDesc>
+   <kathanon.CategorizedBillMenus.CondTextName>text</kathanon.CategorizedBillMenus.CondTextName>
+   <kathanon.CategorizedBillMenus.CondTextDesc>Compares the specified value to a given text.</kathanon.CategorizedBillMenus.CondTextDesc>
+
+   <kathanon.CategorizedBillMenus.ValueResearchName>requires research</kathanon.CategorizedBillMenus.ValueResearchName>
+   <kathanon.CategorizedBillMenus.ValueResearchDesc>Compare with research projects required by the recipe.</kathanon.CategorizedBillMenus.ValueResearchDesc>
+   <kathanon.CategorizedBillMenus.ValueIngredientFixedName>ingredient (fixed)</kathanon.CategorizedBillMenus.ValueIngredientFixedName>
+   <kathanon.CategorizedBillMenus.ValueIngredientFixedDesc>Compare with the fixed ingredients.</kathanon.CategorizedBillMenus.ValueIngredientFixedDesc>
+   <kathanon.CategorizedBillMenus.ValueIngredientAllName>ingredient (all)</kathanon.CategorizedBillMenus.ValueIngredientAllName>
+   <kathanon.CategorizedBillMenus.ValueIngredientAllDesc>Compare with all ingredients, including every alternative.</kathanon.CategorizedBillMenus.ValueIngredientAllDesc>
+   <kathanon.CategorizedBillMenus.ValueRecipeName>recipe</kathanon.CategorizedBillMenus.ValueRecipeName>
+   <kathanon.CategorizedBillMenus.ValueRecipeDesc>Compare with the recipe.</kathanon.CategorizedBillMenus.ValueRecipeDesc>
+
+   <kathanon.CategorizedBillMenus.ConditionPrefix>If</kathanon.CategorizedBillMenus.ConditionPrefix>
+   <kathanon.CategorizedBillMenus.ActionPrefix>then</kathanon.CategorizedBillMenus.ActionPrefix>
+   <kathanon.CategorizedBillMenus.AllowAfterNoTips>And then stop applying rules.</kathanon.CategorizedBillMenus.AllowAfterNoTips>
+   <kathanon.CategorizedBillMenus.AllowAfterYesTips>And then continue applying rules.</kathanon.CategorizedBillMenus.AllowAfterYesTips>
+   <kathanon.CategorizedBillMenus.CopyNoTip>Moves the menu option to the new place.</kathanon.CategorizedBillMenus.CopyNoTip>
+   <kathanon.CategorizedBillMenus.CopyYesTip>Copies the menu option to the new place.</kathanon.CategorizedBillMenus.CopyYesTip>
+   <kathanon.CategorizedBillMenus.OnCopiedNoTip>Do not apply on copies of menu options that were created by earlier rules.</kathanon.CategorizedBillMenus.OnCopiedNoTip>
+   <kathanon.CategorizedBillMenus.OnCopiedYesTip>Apply on copies of menu options that were created by earlier rules.</kathanon.CategorizedBillMenus.OnCopiedYesTip>
+   <kathanon.CategorizedBillMenus.OnMovedNoTip>Do not apply on menu options that were moved by earlier rules.</kathanon.CategorizedBillMenus.OnMovedNoTip>
+   <kathanon.CategorizedBillMenus.OnMovedYesTip>Apply on menu options that were moved by earlier rules.</kathanon.CategorizedBillMenus.OnMovedYesTip>
+	<!--<kathanon.CategorizedBillMenus.></kathanon.CategorizedBillMenus.>-->
+</LanguageData>

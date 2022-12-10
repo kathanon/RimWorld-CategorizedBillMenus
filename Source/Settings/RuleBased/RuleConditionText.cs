@@ -18,7 +18,7 @@ namespace CategorizedBillMenus {
         }
 
         public RuleConditionText()
-            : base("text", "Compares the specified value to a given text.") { }
+            : base(Strings.CondTextName, Strings.CondTextDesc) { }
 
         public RuleConditionText(TextValue value, TextOperation comparison, string expected)
                 : this() {
@@ -55,7 +55,7 @@ namespace CategorizedBillMenus {
         }
 
         public override string SettingsClosedLabel 
-            => $"{Name} {value?.SettingsClosedLabel} {comparison?.SettingsClosedLabel} \"{expected}\"";
+            => $"{Strings.CondTextName} {value?.SettingsClosedLabel} {comparison?.SettingsClosedLabel} \"{expected}\"";
 
         public override void ExposeData() {
             base.ExposeData();

@@ -9,18 +9,12 @@ using Verse;
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
     public abstract class RuleCondition : RulePart<RuleCondition> {
-        private static readonly string[] onCopiedTips = {
-            "Do not apply on copies of menu options that were created by earlier rules.",
-            "Apply on copies of menu options that were created by earlier rules."
-        };
-        private static readonly string[] onMovedTips = {
-            "Do not apply on menu options that were moved by earlier rules.",
-            "Apply on menu options that were moved by earlier rules."
-        };
-        private static readonly Texture2D[] overlayIcons = {
-            Textures.NoIcon,
-            BaseContent.ClearTex
-        };
+        private static readonly string[] onCopiedTips 
+            = { Strings.OnCopiedNoTip, Strings.OnCopiedYesTip };
+        private static readonly string[] onMovedTips  
+            = { Strings.OnMovedNoTip, Strings.OnMovedYesTip };
+        private static readonly Texture2D[] overlayIcons 
+            = {Textures.NoIcon, BaseContent.ClearTex };
 
         private bool onCopied = false;
         private bool onMoved  = true;

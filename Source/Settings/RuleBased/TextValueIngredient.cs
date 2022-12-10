@@ -8,19 +8,16 @@ using Verse;
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
     public class TextValueIngredient : TextValueDefs<ThingDef> {
-        private const string ValueIngredientName = "ingredient (fixed)";
-        private const string ValueIngredientDesc = "Compare with the fixed ingredients.";
-
         static TextValueIngredient() {
             Register(new TextValueIngredient());
         }
 
-        public TextValueIngredient() : base(ValueIngredientName, ValueIngredientDesc) { }
+        public TextValueIngredient() : base(Strings.ValueIngredientFixedName, Strings.ValueIngredientFixedDesc) { }
 
         public TextValueIngredient(int combinerIndex, int getterIndex)
-            : base(ValueIngredientName, ValueIngredientDesc, combinerIndex, getterIndex) { }
+            : base(Strings.ValueIngredientFixedName, Strings.ValueIngredientFixedDesc, combinerIndex, getterIndex) { }
 
-        private TextValueIngredient(float _) : base(ValueIngredientName, ValueIngredientDesc, 0f) {}
+        private TextValueIngredient(float _) : base(Strings.ValueIngredientFixedName, Strings.ValueIngredientFixedDesc, 0f) {}
 
         public override TextValue Copy() => CopyTo(new TextValueIngredient(0f));
 
@@ -31,16 +28,13 @@ namespace CategorizedBillMenus {
 
     [StaticConstructorOnStartup]
     public class ComparisonValueIngredientAll : TextValueDefs<ThingDef> {
-        private const string ValueIngredientName = "ingredient (all)";
-        private const string ValueIngredientDesc = "Compare with all ingredients, including every alternative.";
-
         static ComparisonValueIngredientAll() {
             Register(new ComparisonValueIngredientAll());
         }
 
-        public ComparisonValueIngredientAll() : base(ValueIngredientName, ValueIngredientDesc) { }
+        public ComparisonValueIngredientAll() : base(Strings.ValueIngredientAllName, Strings.ValueIngredientAllDesc) { }
 
-        private ComparisonValueIngredientAll(int _) : base(ValueIngredientName, ValueIngredientDesc, getterIndex: 0) { }
+        private ComparisonValueIngredientAll(int _) : base(Strings.ValueIngredientFixedName, Strings.ValueIngredientFixedDesc, getterIndex: 0) { }
 
         public override TextValue Copy() => CopyTo(new ComparisonValueIngredientAll(0));
 

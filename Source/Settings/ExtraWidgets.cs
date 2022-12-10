@@ -12,7 +12,6 @@ namespace CategorizedBillMenus {
         public const float Margin   = Settings.Margin;
         public const float IconStep = IconSize + Margin;
         public const float IconMid  = IconSize / 2;
-
         public static Texture2D[] collapseIcons = { TexButton.Reveal, TexButton.Collapse };
         public static string[]    collapseTips  = { Strings.OpenTooltip, Strings.ClosedTooltip };
 
@@ -95,7 +94,7 @@ namespace CategorizedBillMenus {
 
         private static bool SelectButton<T>(
                 this WidgetRow row, T cur, Func<T, string> label, Func<T, string> description = null) 
-            => row.ButtonText(label(cur) ?? "(select)", description?.Invoke(cur));
+            => row.ButtonText(label(cur) ?? Strings.NoneSelectedLabel, description?.Invoke(cur));
 
         public static void SelectMenu(
                 IEnumerable<ISettingsEntry> list, Action<ISettingsEntry> set) 

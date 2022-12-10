@@ -3,50 +3,79 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Verse;
 
 namespace CategorizedBillMenus {
     public static class Strings {
         public const string ID   = "kathanon.CategorizedBillMenus";
         public const string Name = "Categorized Bill Menus";
 
-        public const string GeneralTitle = "General";
-        public const string GeneralTooltip = "General options.";
-        public const string SubMenusTitle = "Sub-menu setup";
-        public const string SubMenusTooltip = "Configure what sub-menus are generated.";
-        public const string CategoriesTitle = "Included categories";
-        public const string CategoriesTooltip = "Uncheck any categories that should not be used in menus."; //TODO: improve
-        public const string OpenTooltip = "Collapse";
-        public const string ClosedTooltip = "Expand";
-        public const string CollapseOption = "Collapse sub-menus with only one item";
-        public const string NoBodyPartCat = "Whole body";
+        // Strings.xml
+        public static readonly string FavCat        = (ID + ".FavCat"       ).Translate();
+        public static readonly string NoBodyPartCat = (ID + ".NoBodyPartCat").Translate();
 
-        public const string RuleBasedName = "Rule-based";
-        public const string RuleBasedDesc = "Applies an editable list of simple rules.";
-        public const string ByLimbName = "Medical - By Body Part";
-        public const string ByLimbDesc = "Organizes operation bills after what body part they apply to.";
-        public const string ByTypeName = "Medical - By Type";
-        public const string ByTypeDesc = "Organizes operation bills after the type of procedure.";
-        public const string ManualName = "Manual";
-        public const string ManualDesc = "Freely reorder recipies and categories, as well as add new categories.";
-        public const string DefaultName = "Thing categories";
-        public const string DefaultDesc = "Place each item in a sub-menu corresponding to the first thing category it belongs to.";
+        // Settings.xml
+        public static readonly string GeneralTitle      = (ID + ".GeneralTitle"     ).Translate();
+        public static readonly string GeneralTooltip    = (ID + ".GeneralTooltip"   ).Translate();
+        public static readonly string SubMenusTitle     = (ID + ".SubMenusTitle"    ).Translate();
+        public static readonly string SubMenusTooltip   = (ID + ".SubMenusTooltip"  ).Translate();
+        public static readonly string CategoriesTitle   = (ID + ".CategoriesTitle"  ).Translate();
+        public static readonly string CategoriesTooltip = (ID + ".CategoriesTooltip").Translate();
+        public static readonly string OpenTooltip       = (ID + ".OpenTooltip"      ).Translate();
+        public static readonly string ClosedTooltip     = (ID + ".ClosedTooltip"    ).Translate();
+        public static readonly string CollapseOption    = (ID + ".CollapseOption"   ).Translate();
+        public static readonly string NoneSelectedLabel = (ID + ".NoneSelectedLabel").Translate();
 
-        public const string ActionByLimbName = "by body part";
-        public const string ActionByLimbDesc = "Sort operations based on the target body part";
-        public const string ActionNamedName = "add sub-menu";
-        public const string ActionNamedDesc = "Add a custom sub-menu.";
-        public const string ActionByResearchName = "by research";
-        public const string ActionByResearchDesc = "Sort by required research. If there are several, uses the first.";
+        public static readonly string RuleBasedName  = (ID + ".RuleBasedName" ).Translate();
+        public static readonly string RuleBasedDesc  = (ID + ".RuleBasedDesc" ).Translate();
+        public static readonly string ByLimbName     = (ID + ".ByLimbName"    ).Translate();
+        public static readonly string ByLimbDesc     = (ID + ".ByLimbDesc"    ).Translate();
+        public static readonly string ByTypeName     = (ID + ".ByTypeName"    ).Translate();
+        public static readonly string ByTypeDesc     = (ID + ".ByTypeDesc"    ).Translate();
+        public static readonly string ManualName     = (ID + ".ManualName"    ).Translate();
+        public static readonly string ManualDesc     = (ID + ".ManualDesc"    ).Translate();
+        public static readonly string CategoriesName = (ID + ".CategoriesName").Translate();
+        public static readonly string CategoriesDesc = (ID + ".CategoriesDesc").Translate();
 
-        public const string CondSurgeryName = "is operation";
-        public const string CondSurgeryDesc = "Matches all operation recipes";
-        public const string CondOrName = "any of";
-        public const string CondOrDesc = "Matches if any of the contained conditions matches.";
-        public const string CondAndName = "all of";
-        public const string CondAndDesc = "Matches if all of the contained conditions matches.";
-        public const string CondNotName = "not";
-        public const string CondNotDesc = "Matches if the contained condition does not match.";
+        // Rules.xml
+        public static readonly string ActionByLimbName     = (ID + ".ActionByLimbName"    ).Translate();
+        public static readonly string ActionByLimbDesc     = (ID + ".ActionByLimbDesc"    ).Translate();
+        public static readonly string ActionNamedName      = (ID + ".ActionNamedName"     ).Translate();
+        public static readonly string ActionNamedDesc      = (ID + ".ActionNamedDesc"     ).Translate();
+        public static readonly string ActionByResearchName = (ID + ".ActionByResearchName").Translate();
+        public static readonly string ActionByResearchDesc = (ID + ".ActionByResearchDesc").Translate();
+        public static readonly string ActionNoopName       = (ID + ".ActionNoopName"      ).Translate();
+        public static readonly string ActionNoopDesc       = (ID + ".ActionNoopDesc"      ).Translate();
 
-        public static readonly string FavCat = "Favorites";
+        public static readonly string CondSurgeryName = (ID + ".CondSurgeryName").Translate();
+        public static readonly string CondSurgeryDesc = (ID + ".CondSurgeryDesc").Translate();
+        public static readonly string CondOrName      = (ID + ".CondOrName"     ).Translate();
+        public static readonly string CondOrDesc      = (ID + ".CondOrDesc"     ).Translate();
+        public static readonly string CondAndName     = (ID + ".CondAndName"    ).Translate();
+        public static readonly string CondAndDesc     = (ID + ".CondAndDesc"    ).Translate();
+        public static readonly string CondNotName     = (ID + ".CondNotName"    ).Translate();
+        public static readonly string CondNotDesc     = (ID + ".CondNotDesc"    ).Translate();
+        public static readonly string CondTextName    = (ID + ".CondTextName"   ).Translate();
+        public static readonly string CondTextDesc    = (ID + ".CondTextDesc"   ).Translate();
+
+        public static readonly string ValueResearchName        = (ID + ".ValueResearchName"       ).Translate();
+        public static readonly string ValueResearchDesc        = (ID + ".ValueResearchDesc"       ).Translate();
+        public static readonly string ValueIngredientFixedName = (ID + ".ValueIngredientFixedName").Translate();
+        public static readonly string ValueIngredientFixedDesc = (ID + ".ValueIngredientFixedDesc").Translate();
+        public static readonly string ValueIngredientAllName   = (ID + ".ValueIngredientAllName"  ).Translate();
+        public static readonly string ValueIngredientAllDesc   = (ID + ".ValueIngredientAllDesc"  ).Translate();
+        public static readonly string ValueRecipeName          = (ID + ".ValueRecipeName"         ).Translate();
+        public static readonly string ValueRecipeDesc          = (ID + ".ValueRecipeDesc"         ).Translate();
+
+        public static readonly string ConditionPrefix   = (ID + ".ConditionPrefix"  ).Translate();
+        public static readonly string ActionPrefix      = (ID + ".ActionPrefix"     ).Translate();
+        public static readonly string AllowAfterNoTips  = (ID + ".AllowAfterNoTips" ).Translate();
+        public static readonly string AllowAfterYesTips = (ID + ".AllowAfterYesTips").Translate();
+        public static readonly string CopyNoTip         = (ID + ".CopyNoTip"        ).Translate();
+        public static readonly string CopyYesTip        = (ID + ".CopyYesTip"       ).Translate();
+        public static readonly string OnCopiedNoTip     = (ID + ".OnCopiedNoTip"    ).Translate();
+        public static readonly string OnCopiedYesTip    = (ID + ".OnCopiedYesTip"   ).Translate();
+        public static readonly string OnMovedNoTip      = (ID + ".OnMovedNoTip"     ).Translate();
+        public static readonly string OnMovedYesTip     = (ID + ".OnMovedYesTip"    ).Translate();
     }
 }

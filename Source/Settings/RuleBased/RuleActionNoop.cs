@@ -8,16 +8,13 @@ using Verse;
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
     public class RuleActionNoop : RuleAction {
-        private const string ActionNoopName = "nothing";
-        private const string ActionNoopDesc = "Do nothing. This can be used to skip the remaining rules in the module.";
-
         public static readonly RuleActionNoop Instance = new RuleActionNoop();
 
         static RuleActionNoop() {
             Register(new RuleActionNoop());
         }
 
-        private RuleActionNoop() : base(false, ActionNoopName, ActionNoopDesc) {}
+        private RuleActionNoop() : base(false, Strings.ActionNoopName, Strings.ActionNoopDesc) {}
 
         protected override bool FixedCopies => true;
 

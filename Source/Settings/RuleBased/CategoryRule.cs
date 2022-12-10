@@ -18,15 +18,10 @@ namespace CategorizedBillMenus {
         public const float RowHeight     = CheckboxSize + Margin;
         public const float RuleIconYAdj  = (CheckboxSize - RuleIconSize) / 2;
         public const float RuleIconSpace = RuleIconSize + SmallMargin;
-
-        public const string ConditionPrefix = "If";
-        public const string ActionPrefix = "then";
         public const UIDirection Dir = UIDirection.RightThenDown;
 
-        private static readonly string[] allowAfterTips = {
-            "And then continue applying rules.",
-            "And then stop applying rules."
-        };
+        private static readonly string[] allowAfterTips 
+            = { Strings.AllowAfterNoTips, Strings.AllowAfterYesTips };
 
         private RuleCondition condition;
         private RuleAction action;
@@ -83,11 +78,11 @@ namespace CategorizedBillMenus {
             if (open) {
                 // TODO: show icons for new rule - maybe null object?
                 var subRect = rect.LeftPartPixels(width);
-                DoPart(condition, c => condition = c, ConditionPrefix, row, subRect, ref y1, 1);
+                DoPart(condition, c => condition = c, Strings.ConditionPrefix, row, subRect, ref y1, 1);
 
                 subRect.x = (y1 > curY) ? rect.x + width + Margin : row.FinalX;
                 subRect.xMax = rect.xMax - RuleIconSpace;
-                DoPart(action, a => action = a, ActionPrefix, row, subRect, ref y2);
+                DoPart(action, a => action = a, Strings.ActionPrefix, row, subRect, ref y2);
 
                 var after = new Rect(rect.xMax - RuleIconSize, curY + RuleIconYAdj, RuleIconSize, RuleIconSize);
                 ExtraWidgets.ToggleButton(
@@ -98,7 +93,7 @@ namespace CategorizedBillMenus {
                 var textRect = new Rect(rect.x + RuleIconSpace, curY, rect.width - RuleIconSpace, CheckboxSize);
                 string conditionText = condition?.SettingsClosedLabel ?? "-";
                 string actionText = action?.SettingsClosedLabel ?? "-";
-                string text = $"{ConditionPrefix} {conditionText} {ActionPrefix} {actionText}";
+                string text = $"{Strings.ConditionPrefix} {conditionText} {Strings.ActionPrefix} {actionText}";
                 Widgets.Label(textRect, text);
 
             }

@@ -8,21 +8,18 @@ using Verse;
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
     public class TextValueResearch : TextValueDefs<ResearchProjectDef> {
-        private const string ValueResearchName = "requires research";
-        private const string ValueResearchDesc = "Compare with research projects required by the recipe.";
-
         static TextValueResearch() {
             Register(new TextValueResearch());
         }
 
         public TextValueResearch() 
-            : base(ValueResearchName, ValueResearchDesc) { }
+            : base(Strings.ValueResearchName, Strings.ValueResearchDesc) { }
 
         public TextValueResearch(int combinerIndex, int getterIndex)
-            : base(ValueResearchName, ValueResearchDesc, combinerIndex, getterIndex) { }
+            : base(Strings.ValueResearchName, Strings.ValueResearchDesc, combinerIndex, getterIndex) { }
 
         private TextValueResearch(float _) 
-            : base(ValueResearchName, ValueResearchDesc, 0f) {}
+            : base(Strings.ValueResearchName, Strings.ValueResearchDesc, 0f) {}
 
         public override TextValue Copy() => CopyTo(new TextValueResearch(0));
         protected override IEnumerable<ResearchProjectDef> GetDefs(BillMenuEntry entry) {
@@ -33,5 +30,5 @@ namespace CategorizedBillMenus {
                 yield return def2;
             }
         }
-    }
+    }//CategorizedBillMenus.Strings
 }
