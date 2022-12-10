@@ -8,11 +8,11 @@ using Verse;
 
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
-    public abstract class ComparisonValueDef<T> : ComparisonValue where T : Def {
+    public abstract class TextValueDef<T> : TextValue where T : Def {
         private List<(string name, Func<T, string> get)> getters;
         private int index;
 
-        protected ComparisonValueDef(string name, string description, int getterIndex = 0, 
+        protected TextValueDef(string name, string description, int getterIndex = 0, 
                 params (string name, Func<T, string> get)[] getters) 
                 : base(name, description) {
             this.getters = new List<(string name, Func<T, string> get)> {
@@ -23,10 +23,10 @@ namespace CategorizedBillMenus {
             index = getterIndex;
         }
 
-        protected ComparisonValueDef(string name, string description, float _) 
+        protected TextValueDef(string name, string description, float _) 
             : base(name, description) {}
 
-        protected ComparisonValueDef<T> CopyTo(ComparisonValueDef<T> other) {
+        protected TextValueDef<T> CopyTo(TextValueDef<T> other) {
             other.getters = getters;
             other.index = index;
             return other;

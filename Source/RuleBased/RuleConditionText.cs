@@ -9,8 +9,8 @@ using Verse;
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
     public class RuleConditionText : RuleCondition {
-        private ComparisonValue value;
-        private ComparisonOperation comparison;
+        private TextValue value;
+        private TextOperation comparison;
         private string expected;
 
         static RuleConditionText() {
@@ -20,15 +20,15 @@ namespace CategorizedBillMenus {
         public RuleConditionText()
             : base("text", "Compares the specified value to a given text.") { }
 
-        public RuleConditionText(ComparisonValue value, ComparisonOperation comparison, string expected)
+        public RuleConditionText(TextValue value, TextOperation comparison, string expected)
                 : this() {
             this.value = value;
             this.comparison = comparison;
             this.expected = expected;
         }
 
-        public RuleConditionText(ComparisonValue value, Comparison comparison, string expected)
-                : this(value, ComparisonOperation.Of(comparison), expected) {}
+        public RuleConditionText(TextValue value, Comparison comparison, string expected)
+                : this(value, TextOperation.Of(comparison), expected) {}
 
         private RuleConditionText(RuleConditionText toCopy) : this() {
             value = toCopy.value;

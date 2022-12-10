@@ -7,24 +7,24 @@ using Verse;
 
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
-    public class ComparisonValueResearch : ComparisonValueDefs<ResearchProjectDef> {
+    public class TextValueResearch : TextValueDefs<ResearchProjectDef> {
         private const string ValueResearchName = "requires research";
         private const string ValueResearchDesc = "Compare with research projects required by the recipe.";
 
-        static ComparisonValueResearch() {
-            Register(new ComparisonValueResearch());
+        static TextValueResearch() {
+            Register(new TextValueResearch());
         }
 
-        public ComparisonValueResearch() 
+        public TextValueResearch() 
             : base(ValueResearchName, ValueResearchDesc) { }
 
-        public ComparisonValueResearch(int combinerIndex, int getterIndex)
+        public TextValueResearch(int combinerIndex, int getterIndex)
             : base(ValueResearchName, ValueResearchDesc, combinerIndex, getterIndex) { }
 
-        private ComparisonValueResearch(float _) 
+        private TextValueResearch(float _) 
             : base(ValueResearchName, ValueResearchDesc, 0f) {}
 
-        public override ComparisonValue Copy() => CopyTo(new ComparisonValueResearch(0));
+        public override TextValue Copy() => CopyTo(new TextValueResearch(0));
         protected override IEnumerable<ResearchProjectDef> GetDefs(BillMenuEntry entry) {
             var def = entry.Recipe.researchPrerequisite;
             if (def != null) yield return def;

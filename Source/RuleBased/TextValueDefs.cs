@@ -9,7 +9,7 @@ using Verse;
 
 namespace CategorizedBillMenus {
     using CombinerFunc = Func<IEnumerable<string>, Func<string, bool>, bool>;
-    public abstract class ComparisonValueDefs<T> : ComparisonValueDef<T> where T : Def {
+    public abstract class TextValueDefs<T> : TextValueDef<T> where T : Def {
         private static readonly List<(string name, CombinerFunc func)> combiners = 
             new List<(string name, CombinerFunc)>{
                 ("any", Enumerable.Any),
@@ -18,7 +18,7 @@ namespace CategorizedBillMenus {
 
         private int index = 0;
 
-        protected ComparisonValueDefs(string name,
+        protected TextValueDefs(string name,
                                       string description,
                                       int combinerIndex = 0,
                                       int getterIndex = 0,
@@ -27,10 +27,10 @@ namespace CategorizedBillMenus {
             index = combinerIndex;
         }
 
-        protected ComparisonValueDefs(string name, string description, float _) 
+        protected TextValueDefs(string name, string description, float _) 
             : base(name, description, 0f) {}
 
-        protected ComparisonValueDefs<T> CopyTo(ComparisonValueDefs<T> other) {
+        protected TextValueDefs<T> CopyTo(TextValueDefs<T> other) {
             other.index = index;
             base.CopyTo(other);
             return other;
@@ -40,10 +40,10 @@ namespace CategorizedBillMenus {
 
         protected string CombinerName => combiners[index].name;
 
-        public override bool Compare(ComparisonOperation comparison, BillMenuEntry entry, string expected)
+        public override bool Compare(TextOperation comparison, BillMenuEntry entry, string expected)
             => Combiner(GetAll(entry), s => comparison.Compare(s, expected));
 
-        public override bool Compare(ComparisonOperation comparison, BillMenuEntry entry, MenuNode parent, string expected)
+        public override bool Compare(TextOperation comparison, BillMenuEntry entry, MenuNode parent, string expected)
             => true; // If first variant returned true, then this should as well
 
         protected override T GetDef(BillMenuEntry entry) 

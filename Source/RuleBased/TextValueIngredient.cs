@@ -7,22 +7,22 @@ using Verse;
 
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
-    public class ComparisonValueIngredient : ComparisonValueDefs<ThingDef> {
+    public class TextValueIngredient : TextValueDefs<ThingDef> {
         private const string ValueIngredientName = "ingredient (fixed)";
         private const string ValueIngredientDesc = "Compare with the fixed ingredients.";
 
-        static ComparisonValueIngredient() {
-            Register(new ComparisonValueIngredient());
+        static TextValueIngredient() {
+            Register(new TextValueIngredient());
         }
 
-        public ComparisonValueIngredient() : base(ValueIngredientName, ValueIngredientDesc) { }
+        public TextValueIngredient() : base(ValueIngredientName, ValueIngredientDesc) { }
 
-        public ComparisonValueIngredient(int combinerIndex, int getterIndex)
+        public TextValueIngredient(int combinerIndex, int getterIndex)
             : base(ValueIngredientName, ValueIngredientDesc, combinerIndex, getterIndex) { }
 
-        private ComparisonValueIngredient(float _) : base(ValueIngredientName, ValueIngredientDesc, 0f) {}
+        private TextValueIngredient(float _) : base(ValueIngredientName, ValueIngredientDesc, 0f) {}
 
-        public override ComparisonValue Copy() => CopyTo(new ComparisonValueIngredient(0f));
+        public override TextValue Copy() => CopyTo(new TextValueIngredient(0f));
 
         protected override IEnumerable<ThingDef> GetDefs(BillMenuEntry entry) 
             => entry.Recipe.ingredients.Where(i => i.IsFixedIngredient).Select(i => i.FixedIngredient);
@@ -30,7 +30,7 @@ namespace CategorizedBillMenus {
 
 
     [StaticConstructorOnStartup]
-    public class ComparisonValueIngredientAll : ComparisonValueDefs<ThingDef> {
+    public class ComparisonValueIngredientAll : TextValueDefs<ThingDef> {
         private const string ValueIngredientName = "ingredient (all)";
         private const string ValueIngredientDesc = "Compare with all ingredients, including every alternative.";
 
@@ -42,7 +42,7 @@ namespace CategorizedBillMenus {
 
         private ComparisonValueIngredientAll(int _) : base(ValueIngredientName, ValueIngredientDesc, getterIndex: 0) { }
 
-        public override ComparisonValue Copy() => CopyTo(new ComparisonValueIngredientAll(0));
+        public override TextValue Copy() => CopyTo(new ComparisonValueIngredientAll(0));
 
         protected override IEnumerable<ThingDef> GetDefs(BillMenuEntry entry) 
             => entry.Recipe.ingredients.SelectMany(i => i.filter.AllowedThingDefs);

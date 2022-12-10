@@ -39,46 +39,46 @@ new List<CategoryRule> {
     new CategoryRule(
         new RuleConditionOr(
             new RuleConditionText(
-                new ComparisonValueIngredient(Any, Label), 
+                new TextValueIngredient(Any, Label), 
                 Comparison.Equals,
                 "Wood"), 
             new RuleConditionText(
-                new ComparisonValueRecipe(Label), 
+                new TextValueRecipe(Label), 
                 Comparison.Contains,
                 "denture")), 
         new RuleActionNamed("Primitive")),
     new CategoryRule(
         new RuleConditionText(
-            new ComparisonValueIngredient(Any, Label),
+            new TextValueIngredient(Any, Label),
             Comparison.Contains,
             "Bionic"),
         new RuleActionNamed("Bionic")),
     new CategoryRule(
         new RuleConditionText(
-            new ComparisonValueRecipe(Label),
+            new TextValueRecipe(Label),
             Comparison.Contains,
             "Administer"),
         new RuleActionNamed("Drugs")),
     new CategoryRule(
         new RuleConditionText(
-            new ComparisonValueIngredient(Any, Def),
+            new TextValueIngredient(Any, Def),
             Comparison.Contains,
             "Prosthetic"),
         new RuleActionNamed("Prosthetic")),
     new CategoryRule(
         new RuleConditionOr(
             new RuleConditionText(
-                new ComparisonValueResearch(Any, Def), 
+                new TextValueResearch(Any, Def), 
                 Comparison.Equals,
                 "FertilityProcedures"), 
             new RuleConditionText(
-                new ComparisonValueRecipe(Def), 
+                new TextValueRecipe(Def), 
                 Comparison.Equals,
                 "TerminatePregnancy")), 
         new RuleActionNamed("Fertility")),
     new CategoryRule(
         new RuleConditionText(
-            new ComparisonValueRecipe(Def),
+            new TextValueRecipe(Def),
             Comparison.Equals,
             "RemoveBodyPart"),
         new RuleActionNamed("Harvest / Amputate")),

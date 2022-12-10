@@ -7,10 +7,10 @@ using UnityEngine;
 using Verse;
 
 namespace CategorizedBillMenus {
-    public abstract class ComparisonValue : Registerable<ComparisonValue> {
-        public static string AlwaysMatchMarker = ComparisonOperation.AlwaysMatchMarker;
+    public abstract class TextValue : Registerable<TextValue> {
+        public static string AlwaysMatchMarker = TextOperation.AlwaysMatchMarker;
 
-        public ComparisonValue(string name, string description) 
+        public TextValue(string name, string description) 
             : base(name, description, false) {}
 
 
@@ -18,10 +18,10 @@ namespace CategorizedBillMenus {
 
         public abstract string Get(BillMenuEntry entry, MenuNode parent);
 
-        public virtual bool Compare(ComparisonOperation comparison, BillMenuEntry entry, string expected) 
+        public virtual bool Compare(TextOperation comparison, BillMenuEntry entry, string expected) 
             => comparison.Compare(Get(entry), expected);
 
-        public virtual bool Compare(ComparisonOperation comparison, BillMenuEntry entry, MenuNode parent, string expected) 
+        public virtual bool Compare(TextOperation comparison, BillMenuEntry entry, MenuNode parent, string expected) 
             => comparison.Compare(Get(entry, parent), expected);
 
         public virtual void DoSettings(WidgetRow row, Rect rect, ref float curY) {}
