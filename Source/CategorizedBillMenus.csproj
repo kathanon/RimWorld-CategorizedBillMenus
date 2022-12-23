@@ -26,6 +26,14 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <!-- RimWorld DLLs -->
     <Reference Include="Assembly-CSharp" Private="False">
@@ -62,15 +70,18 @@
   <ItemGroup>
     <Compile Include="BillMenuEntry.cs" />
     <Compile Include="BillStack_Patches.cs" />
+    <Compile Include="ScribeUtils.cs" />
     <Compile Include="Settings\Categorizers\CategorizerManual.cs" />
     <Compile Include="Settings\Categorizers\CategorizerRuleBased.cs" />
     <Compile Include="Settings\Categorizers\Categorizer.cs" />
     <Compile Include="Settings\Categorizers\CategorizerThingCategory.cs" />
     <Compile Include="Settings\Categorizers\CategorizerEditable.cs" />
     <Compile Include="Settings\Categorizers\CategorizerSingleton.cs" />
+    <Compile Include="Settings\RegisterableId.cs" />
     <Compile Include="Settings\RuleBased\CategoryRule.cs" />
     <Compile Include="CheckValue.cs" />
-    <Compile Include="Settings\RuleBased\TextValueResearch.cs" />
+    <Compile Include="Settings\RuleBased\TextValueDefChained.cs" />
+    <Compile Include="Settings\RuleBased\TextValueDefsChained.cs" />
     <Compile Include="Settings\RuleBased\RuleActionNamed.cs" />
     <Compile Include="Settings\RuleBased\RuleActionNoop.cs" />
     <Compile Include="Settings\RuleBased\RulePart.cs" />
@@ -81,8 +92,6 @@
     <Compile Include="Settings\RuleBased\TextValueDef.cs" />
     <Compile Include="Settings\RuleBased\TextValueDefs.cs" />
     <Compile Include="Settings\RuleBased\TextValueParent.cs" />
-    <Compile Include="Settings\RuleBased\TextValueIngredient.cs" />
-    <Compile Include="Settings\RuleBased\TextValueRecipe.cs" />
     <Compile Include="Settings\RuleBased\RuleAction.cs" />
     <Compile Include="Settings\RuleBased\RuleActionByLimb.cs" />
     <Compile Include="Settings\RuleBased\RuleActionExtra.cs" />
@@ -91,8 +100,9 @@
     <Compile Include="Settings\RuleBased\RuleConditionText.cs" />
     <Compile Include="Settings\RuleBased\RuleConditionComposite.cs" />
     <Compile Include="Settings\RuleBased\RuleConditionSurgery.cs" />
-    <Compile Include="Registerable.cs" />
+    <Compile Include="Settings\Registerable.cs" />
     <Compile Include="Settings\ISettingsEntry.cs" />
+    <Compile Include="Settings\RuleBased\Values.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Strings.cs" />
     <Compile Include="Main.cs" />
@@ -101,8 +111,45 @@
   </ItemGroup>
   <!-- Include ModFiles -->
   <ItemGroup>
-    <None Include="$(ModFiles)\**" CopyToOutputDirectory="PreserveNewest">
-      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+    <None Include="..\ModFiles\About\About.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>About\About.xml</Link>
+    </None>
+    <None Include="..\ModFiles\About\Preview.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>About\Preview.png</Link>
+    </None>
+    <None Include="..\ModFiles\About\PublishedFileId.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>About\PublishedFileId.txt</Link>
+    </None>
+    <None Include="..\ModFiles\Languages\English\Keyed\Categorizers.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Languages\English\Keyed\Categorizers.xml</Link>
+    </None>
+    <None Include="..\ModFiles\Languages\English\Keyed\Rules.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Languages\English\Keyed\Rules.xml</Link>
+    </None>
+    <None Include="..\ModFiles\Languages\English\Keyed\Settings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Languages\English\Keyed\Settings.xml</Link>
+    </None>
+    <None Include="..\ModFiles\Languages\English\Keyed\Strings.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Languages\English\Keyed\Strings.xml</Link>
+    </None>
+    <None Include="..\ModFiles\Textures\kathanon.CategorizedBillMenus\EditIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Textures\kathanon.CategorizedBillMenus\EditIcon.png</Link>
+    </None>
+    <None Include="..\ModFiles\Textures\kathanon.CategorizedBillMenus\FavIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Textures\kathanon.CategorizedBillMenus\FavIcon.png</Link>
+    </None>
+    <None Include="..\ModFiles\Textures\kathanon.CategorizedBillMenus\NoIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Textures\kathanon.CategorizedBillMenus\NoIcon.png</Link>
     </None>
   </ItemGroup>
   <ItemGroup />

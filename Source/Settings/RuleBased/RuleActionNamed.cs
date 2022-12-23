@@ -15,10 +15,12 @@ namespace CategorizedBillMenus {
             Register(new RuleActionNamed());
         }
 
-        public RuleActionNamed(string extra = "") : this(extra, false) {}
+        public RuleActionNamed() : this("", false) {}
+
+        public RuleActionNamed(string extra) : this(extra, false) {}
 
         private RuleActionNamed(string extra, bool copies = false)
-                : base(copies, Strings.ActionNamedName, Strings.ActionNamedDesc) {
+                : base(copies, Strings.ActionNamedName, Strings.ActionNamedID, Strings.ActionNamedDesc) {
             this.extra = extra;
         }
 
@@ -34,7 +36,8 @@ namespace CategorizedBillMenus {
             row.TextField(ref extra);
         }
 
-        public override string SettingsClosedLabel => $"{Name} \"{extra}\"";
+        public override string SettingsClosedLabel(CategoryRule rule) 
+            => $"{Name} \"{extra}\"";
 
         public override void ExposeData() {
             base.ExposeData();

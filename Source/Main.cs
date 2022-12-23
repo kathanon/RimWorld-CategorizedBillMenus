@@ -10,7 +10,7 @@ namespace CategorizedBillMenus {
         private Settings settings = null;
 
         public Settings Settings => 
-            settings ?? (settings = GetSettings<Settings>().EnsureSetup());
+            settings ??= GetSettings<Settings>().EnsureSetup();
 
         static Main() {
             var harmony = new Harmony(Strings.ID);

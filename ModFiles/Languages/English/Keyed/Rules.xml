@@ -7,7 +7,8 @@
    <kathanon.CategorizedBillMenus.ActionByResearchName>by research</kathanon.CategorizedBillMenus.ActionByResearchName>
    <kathanon.CategorizedBillMenus.ActionByResearchDesc>Sort by required research. If there are several, uses the first.</kathanon.CategorizedBillMenus.ActionByResearchDesc>
    <kathanon.CategorizedBillMenus.ActionNoopName>nothing</kathanon.CategorizedBillMenus.ActionNoopName>
-   <kathanon.CategorizedBillMenus.ActionNoopDesc>Do nothing. This can be used to skip the remaining rules in the module.</kathanon.CategorizedBillMenus.ActionNoopDesc>
+   <kathanon.CategorizedBillMenus.ActionNoopDesc>Do nothing. This can be used to skip the remaining rules in the module, if the rule is set to not continue matching (the default).</kathanon.CategorizedBillMenus.ActionNoopDesc>
+   <kathanon.CategorizedBillMenus.ActionNoopStop>stop</kathanon.CategorizedBillMenus.ActionNoopStop>
 
    <kathanon.CategorizedBillMenus.CondSurgeryName>is operation</kathanon.CategorizedBillMenus.CondSurgeryName>
    <kathanon.CategorizedBillMenus.CondSurgeryDesc>Matches all operation recipes</kathanon.CategorizedBillMenus.CondSurgeryDesc>
@@ -20,14 +21,24 @@
    <kathanon.CategorizedBillMenus.CondTextName>text</kathanon.CategorizedBillMenus.CondTextName>
    <kathanon.CategorizedBillMenus.CondTextDesc>Compares the specified value to a given text.</kathanon.CategorizedBillMenus.CondTextDesc>
 
+   <kathanon.CategorizedBillMenus.ValueLabelName>label</kathanon.CategorizedBillMenus.ValueLabelName>
+   <kathanon.CategorizedBillMenus.ValueDefNameName>def-name</kathanon.CategorizedBillMenus.ValueDefNameName>
    <kathanon.CategorizedBillMenus.ValueResearchName>requires research</kathanon.CategorizedBillMenus.ValueResearchName>
    <kathanon.CategorizedBillMenus.ValueResearchDesc>Compare with research projects required by the recipe.</kathanon.CategorizedBillMenus.ValueResearchDesc>
+   <kathanon.CategorizedBillMenus.ValueSingleProductName>product (single)</kathanon.CategorizedBillMenus.ValueSingleProductName>
+   <kathanon.CategorizedBillMenus.ValueSingleProductDesc>Compare with the resulting product, if the recipe only produces a single product.</kathanon.CategorizedBillMenus.ValueSingleProductDesc>
+   <kathanon.CategorizedBillMenus.ValueProductName>product (all)</kathanon.CategorizedBillMenus.ValueProductName>
+   <kathanon.CategorizedBillMenus.ValueProductDesc>Compare with all resulting products.</kathanon.CategorizedBillMenus.ValueProductDesc>
    <kathanon.CategorizedBillMenus.ValueIngredientFixedName>ingredient (fixed)</kathanon.CategorizedBillMenus.ValueIngredientFixedName>
    <kathanon.CategorizedBillMenus.ValueIngredientFixedDesc>Compare with the fixed ingredients.</kathanon.CategorizedBillMenus.ValueIngredientFixedDesc>
    <kathanon.CategorizedBillMenus.ValueIngredientAllName>ingredient (all)</kathanon.CategorizedBillMenus.ValueIngredientAllName>
    <kathanon.CategorizedBillMenus.ValueIngredientAllDesc>Compare with all ingredients, including every alternative.</kathanon.CategorizedBillMenus.ValueIngredientAllDesc>
+   <kathanon.CategorizedBillMenus.ValueCategoryName>category</kathanon.CategorizedBillMenus.ValueCategoryName>
+   <kathanon.CategorizedBillMenus.ValueCategoryDesc>The category that the item belongs to. (Or the first, for items belonging to several.)</kathanon.CategorizedBillMenus.ValueCategoryDesc>
    <kathanon.CategorizedBillMenus.ValueRecipeName>recipe</kathanon.CategorizedBillMenus.ValueRecipeName>
    <kathanon.CategorizedBillMenus.ValueRecipeDesc>Compare with the recipe.</kathanon.CategorizedBillMenus.ValueRecipeDesc>
+   <kathanon.CategorizedBillMenus.ValueLimbName>body part</kathanon.CategorizedBillMenus.ValueLimbName>
+   <kathanon.CategorizedBillMenus.ValueLimbDesc>Compare with the body part the operation is on.</kathanon.CategorizedBillMenus.ValueLimbDesc>
 
    <kathanon.CategorizedBillMenus.ConditionPrefix>If</kathanon.CategorizedBillMenus.ConditionPrefix>
    <kathanon.CategorizedBillMenus.ActionPrefix>then</kathanon.CategorizedBillMenus.ActionPrefix>

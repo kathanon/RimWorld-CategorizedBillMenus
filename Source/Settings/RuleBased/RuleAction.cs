@@ -16,8 +16,8 @@ namespace CategorizedBillMenus {
 
         private bool copies;
 
-        protected RuleAction(bool copies, string name, string description) 
-                : base(name, description) {
+        protected RuleAction(bool copies, string id, string name, string description) 
+                : base(name, id, description) {
             this.copies = copies;
         }
 
@@ -45,7 +45,7 @@ namespace CategorizedBillMenus {
         }
 
         private class NullAction : RuleAction {
-            public NullAction() : base(false, "(select)", null) {}
+            public NullAction() : base(false, "null", "(select)", null) {}
 
             public override MenuNode Apply(BillMenuEntry entry, MenuNode parent, MenuNode root) => parent;
             public override RuleAction Copy() => this;

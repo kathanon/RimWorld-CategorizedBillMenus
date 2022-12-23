@@ -18,7 +18,7 @@ namespace CategorizedBillMenus {
         public RuleActionByLimb() : this(false) {}
 
         private RuleActionByLimb(bool copies) 
-            : base(copies, Strings.ActionByLimbName, Strings.ActionByLimbDesc) {}
+            : base(copies, Strings.ActionByLimbName, Strings.ActionByLimbID, Strings.ActionByLimbDesc) {}
 
         public override RuleAction Copy() 
             => new RuleActionByLimb(Copies) { noPart = noPart, firstPartDef = firstPartDef };

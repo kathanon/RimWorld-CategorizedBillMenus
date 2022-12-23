@@ -15,7 +15,7 @@ namespace CategorizedBillMenus {
         public RuleActionByResearch() : this(false) {}
 
         private RuleActionByResearch(bool copies) 
-            : base(copies, Strings.ActionByResearchName, Strings.ActionByResearchDesc) {}
+            : base(copies, Strings.ActionByResearchName, Strings.ActionByResearchID, Strings.ActionByResearchDesc) {}
 
         public override RuleAction Copy() => new RuleActionByResearch(Copies);
 

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using static CategorizedBillMenus.ScribeUtils;
 
 namespace CategorizedBillMenus {
     public class Settings : ModSettings {
@@ -61,7 +62,7 @@ namespace CategorizedBillMenus {
             Scribe_Collections.Look(ref categorizers, "categorizers", LookMode.Deep);
             Scribe_Values.Look(ref useFavorites, "useFavorites", true);
 
-            if (Scribe.mode == LoadSaveMode.PostLoadInit) {
+            if (PostLoadInit) {
                 Setup();
             }
         }
@@ -75,13 +76,8 @@ namespace CategorizedBillMenus {
         }
 
         private void Setup() {
-            // TODO: Make configurable and saved
-            if (categorizers == null) {
-                categorizers = DefaultCategorizers();
-            }
-            // ---
-
-            if (favorites == null) favorites = new HashSet<string>();
+            categorizers ??= DefaultCategorizers();
+            favorites ??= new HashSet<string>();
             root = ThingCategoryDefOf.Root;
 
             favoriteRecipes.Clear();
@@ -90,7 +86,7 @@ namespace CategorizedBillMenus {
 
         private static List<CatEntry> DefaultCategorizers() {
             return new List<CatEntry> {
-                new CatEntry(CategorizerThingCategory.Instance,          true),
+                new CatEntry(CategorizerThingCategory.Instance,        true),
                 new CatEntry(CategorizerRuleBased.PresetByLimb.Copy(), true),
             };
         }
@@ -220,6 +216,7 @@ namespace CategorizedBillMenus {
                                     off,
                                     r2 => NameWidgets(r, r2, entry, doButtons))) {
                     entry.cat.DoSettings(subRect, widthScroll, ref innerCurY);
+                    DividerLine(titleRect, off, ref innerCurY);
                 }
             }
 
@@ -278,14 +275,18 @@ namespace CategorizedBillMenus {
             }
             Text.Font = GameFont.Small;
 
-            if (open) { 
-                rect.xMin -= xOffset;
-                GUI.color = TitleHRColor;
-                Widgets.DrawLineHorizontal(rect.x, curY, rect.width);
-                GUI.color = Color.white;
-                curY += 1f + TitleMargin;
+            if (open) {
+                DividerLine(rect, xOffset, ref curY);
             }
             return open;
+        }
+
+        private static void DividerLine(Rect rect, float xOffset, ref float curY) {
+            rect.xMin -= xOffset;
+            GUI.color = TitleHRColor;
+            Widgets.DrawLineHorizontal(rect.x, curY, rect.width);
+            GUI.color = Color.white;
+            curY += 1f + TitleMargin;
         }
 
         public class CatEntry : IExposable {

@@ -15,7 +15,7 @@ namespace CategorizedBillMenus {
 
         public static readonly TextEquals Instance = new TextEquals();
 
-        private TextEquals() : base("equals", "Matches if the value is equal to the text.") {}
+        public TextEquals() : base("equals", "equals", "Matches if the value is equal to the text.") {}
 
         protected override bool DoComparison(string value, string expected) 
             => value.Equals(expected, IgnoreCase);
@@ -29,7 +29,7 @@ namespace CategorizedBillMenus {
 
         public static readonly TextContains Instance = new TextContains();
 
-        private TextContains() : base("contains", "Matches if the value contains the text.") {}
+        public TextContains() : base("contains", "contains", "Matches if the value contains the text.") {}
 
         protected override bool DoComparison(string value, string expected) 
             => value.IndexOf(expected, IgnoreCase) >= 0;
@@ -43,7 +43,7 @@ namespace CategorizedBillMenus {
 
         public static readonly TextStarts Instance = new TextStarts();
 
-        private TextStarts() : base("starts with", "Matches if the value starts with the text.") {}
+        public TextStarts() : base("starts with", "starts", "Matches if the value starts with the text.") {}
 
         protected override bool DoComparison(string value, string expected) 
             => value.StartsWith(expected, IgnoreCase);
@@ -57,19 +57,19 @@ namespace CategorizedBillMenus {
 
         public static readonly TextEnds Instance = new TextEnds();
 
-        private TextEnds() : base("ends with", "Matches if the value ends with the text.") {}
+        public TextEnds() : base("ends with", "ends", "Matches if the value ends with the text.") {}
 
         protected override bool DoComparison(string value, string expected) 
             => value.IndexOf(expected, IgnoreCase) >= 0;
     }
 
-    public abstract class TextOperation : Registerable<TextOperation> {
+    public abstract class TextOperation : RegisterableById<TextOperation> {
         public static string AlwaysMatchMarker = new StringBuilder("dummy").ToString();
 
         public const StringComparison IgnoreCase = StringComparison.OrdinalIgnoreCase;
 
-        protected TextOperation(string name, string description) 
-            : base(name, description) {
+        protected TextOperation(string name, string id, string description) 
+            : base(name, id, description) {
         }
 
         public static TextOperation Of(Comparison comp)

@@ -14,9 +14,13 @@ namespace CategorizedBillMenus {
             Register(new RuleActionNoop());
         }
 
-        private RuleActionNoop() : base(false, Strings.ActionNoopName, Strings.ActionNoopDesc) {}
+        public RuleActionNoop() 
+            : base(false, Strings.ActionNoopName, Strings.ActionNoopID, Strings.ActionNoopDesc) {}
 
         protected override bool FixedCopies => true;
+
+        public override string SettingsClosedLabel(CategoryRule rule) 
+            => rule.AllowAfter ? Name : Strings.ActionNoopStop;
 
         public override MenuNode Apply(BillMenuEntry entry, MenuNode parent, MenuNode root) => parent;
 

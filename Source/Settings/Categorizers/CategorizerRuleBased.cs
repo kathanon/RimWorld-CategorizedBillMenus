@@ -31,60 +31,64 @@ namespace CategorizedBillMenus {
                 Strings.ByLimbDesc);
 
         public static readonly CategorizerRuleBased PresetByType =
-new CategorizerRuleBased(
-new List<CategoryRule> {
-    new CategoryRule(
-        new RuleConditionNot(RuleConditionSurgery.Instance), 
-        RuleActionNoop.Instance),
-    new CategoryRule(
-        new RuleConditionOr(
-            new RuleConditionText(
-                new TextValueIngredient(Any, Label), 
-                Comparison.Equals,
-                "Wood"), 
-            new RuleConditionText(
-                new TextValueRecipe(Label), 
-                Comparison.Contains,
-                "denture")), 
-        new RuleActionNamed("Primitive")),
-    new CategoryRule(
-        new RuleConditionText(
-            new TextValueIngredient(Any, Label),
-            Comparison.Contains,
-            "Bionic"),
-        new RuleActionNamed("Bionic")),
-    new CategoryRule(
-        new RuleConditionText(
-            new TextValueRecipe(Label),
-            Comparison.Contains,
-            "Administer"),
-        new RuleActionNamed("Drugs")),
-    new CategoryRule(
-        new RuleConditionText(
-            new TextValueIngredient(Any, Def),
-            Comparison.Contains,
-            "Prosthetic"),
-        new RuleActionNamed("Prosthetic")),
-    new CategoryRule(
-        new RuleConditionOr(
-            new RuleConditionText(
-                new TextValueResearch(Any, Def), 
-                Comparison.Equals,
-                "FertilityProcedures"), 
-            new RuleConditionText(
-                new TextValueRecipe(Def), 
-                Comparison.Equals,
-                "TerminatePregnancy")), 
-        new RuleActionNamed("Fertility")),
-    new CategoryRule(
-        new RuleConditionText(
-            new TextValueRecipe(Def),
-            Comparison.Equals,
-            "RemoveBodyPart"),
-        new RuleActionNamed("Harvest / Amputate")),
-},
-Strings.ByTypeName,
-Strings.ByTypeDesc);
+            new CategorizerRuleBased(
+                new List<CategoryRule> {
+                    new CategoryRule(
+                        new RuleConditionNot(RuleConditionSurgery.Instance), 
+                        RuleActionNoop.Instance),
+                    new CategoryRule(
+                        new RuleConditionOr(
+                            new RuleConditionText(
+                                Values.Recipe(
+                                    Values.Ingredient(Any, Label)), 
+                                Comparison.Equals,
+                                "Wood"), 
+                            new RuleConditionText(
+                                Values.Recipe(Label), 
+                                Comparison.Contains,
+                                "denture")), 
+                        new RuleActionNamed("Primitive")),
+                    new CategoryRule(
+                        new RuleConditionText(
+                            Values.Recipe(
+                                Values.Ingredient(Any, Label)),
+                            Comparison.Contains,
+                            "Bionic"),
+                        new RuleActionNamed("Bionic")),
+                    new CategoryRule(
+                        new RuleConditionText(
+                            Values.Recipe(Label),
+                            Comparison.Contains,
+                            "Administer"),
+                        new RuleActionNamed("Drugs")),
+                    new CategoryRule(
+                        new RuleConditionText(
+                            Values.Recipe(
+                                Values.Ingredient(Any, Def)),
+                            Comparison.Contains,
+                            "Prosthetic"),
+                        new RuleActionNamed("Prosthetic")),
+                    new CategoryRule(
+                        new RuleConditionOr(
+                            new RuleConditionText(
+                                Values.Recipe(
+                                    Values.Research(Any, Def)), 
+                                Comparison.Equals,
+                                "FertilityProcedures"), 
+                            new RuleConditionText(
+                                Values.Recipe(Def), 
+                                Comparison.Equals,
+                                "TerminatePregnancy")), 
+                        new RuleActionNamed("Fertility")),
+                    new CategoryRule(
+                        new RuleConditionText(
+                            Values.Recipe(Def),
+                            Comparison.Equals,
+                            "RemoveBodyPart"),
+                        new RuleActionNamed("Harvest / Amputate")),
+                },
+                Strings.ByTypeName,
+                Strings.ByTypeDesc);
 
         protected override IEnumerable<Categorizer> SubOptions(int level) {
             if (level == 0) {
@@ -154,14 +158,17 @@ Strings.ByTypeDesc);
 
             ExtraWidgets.ReorderableList(rules, AddRule, DoRule, rect, ref curY);
 
-            void DoRule(CategoryRule rule, Rect r, float offset, ref float innerCurY) {
+            static void DoRule(CategoryRule rule, Rect r, float offset, ref float innerCurY) {
                 rule.DoSettings(r, ref innerCurY);
             }
         }
 
         public void AddRule() => AddRule(new CategoryRule());
 
-        public void AddRule(CategoryRule rule) => rules.Add(rule);
+        public void AddRule(CategoryRule rule) {
+            rules.Add(rule);
+            rule.Open();
+        }
 
         public override void ExposeData() {
             base.ExposeData();

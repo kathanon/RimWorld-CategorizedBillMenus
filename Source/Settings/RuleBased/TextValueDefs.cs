@@ -8,7 +8,8 @@ using UnityEngine;
 using Verse;
 
 namespace CategorizedBillMenus {
-    using CombinerFunc = Func<IEnumerable<string>, Func<string, bool>, bool>;
+    using CombinerFunc = Func<IEnumerable<bool>, Func<bool, bool>, bool>;
+
     public abstract class TextValueDefs<T> : TextValueDef<T> where T : Def {
         private static readonly List<(string name, CombinerFunc func)> combiners = 
             new List<(string name, CombinerFunc)>{
@@ -19,16 +20,17 @@ namespace CategorizedBillMenus {
         private int index = 0;
 
         protected TextValueDefs(string name,
-                                      string description,
-                                      int combinerIndex = 0,
-                                      int getterIndex = 0,
-                                      params (string name, Func<T, string> get)[] getters)
-                : base(name, description, getterIndex, getters) {
+                                string id,
+                                string description,
+                                int combinerIndex = 0,
+                                int getterIndex = 0,
+                                params IDefValueGetter<T>[] getters)
+                : base(name, id, description, getterIndex, getters) {
             index = combinerIndex;
         }
 
-        protected TextValueDefs(string name, string description, float _) 
-            : base(name, description, 0f) {}
+        protected TextValueDefs(string name, string id, string description, float _) 
+            : base(name, id, description, 0f) {}
 
         protected TextValueDefs<T> CopyTo(TextValueDefs<T> other) {
             other.index = index;
@@ -40,33 +42,56 @@ namespace CategorizedBillMenus {
 
         protected string CombinerName => combiners[index].name;
 
-        public override bool Compare(TextOperation comparison, BillMenuEntry entry, string expected)
-            => Combiner(GetAll(entry), s => comparison.Compare(s, expected));
+        protected bool Compare(TextOperation comparison, IEnumerable<T> defs, string expected)
+            => Combiner(defs.Select(d => Getter.Compare(comparison, d, expected)), v => v);
 
-        public override bool Compare(TextOperation comparison, BillMenuEntry entry, MenuNode parent, string expected)
-            => true; // If first variant returned true, then this should as well
+        public override bool Compare(TextOperation comparison, BillMenuEntry entry, string expected)
+            => Compare(comparison, GetDefs(entry), expected);
 
         protected override T GetDef(BillMenuEntry entry) 
             => throw new NotSupportedException();
 
-        public virtual IEnumerable<string> GetAll(BillMenuEntry entry)
-            => GetDefs(entry).Select(Getter);
-
         protected abstract IEnumerable<T> GetDefs(BillMenuEntry entry);
-
-        public override string Get(BillMenuEntry entry)
-            => GetAll(entry).FirstOrDefault();
 
         public override void DoSettings(WidgetRow row, Rect rect, ref float curY) {
             row.SelectMenuButton(combiners[index], combiners, i => index = i, c => c.name);
             base.DoSettings(row, rect, ref curY);
         }
 
-        public override string SettingsClosedLabel => $"{Name} {CombinerName} {GetterName}";
+        public override string SettingsClosedLabel => $"{Name} {CombinerName} {GetterClosedLabel}";
 
         public override void ExposeData() {
             base.ExposeData();
             Scribe_Values.Look(ref index, "combiner");
         }
+    }
+
+    public class TextValueDefsConcrete<T> : TextValueDefs<T> where T : Def {
+        private Func<BillMenuEntry, IEnumerable<T>> getDefs;
+
+        private TextValueDefsConcrete(string name, string id, string description)
+            : base(name, id, description, 0f) { }
+
+        public TextValueDefsConcrete(string name,
+                                     string id, 
+                                     string description,
+                                     Func<BillMenuEntry, IEnumerable<T>> getDefs,
+                                     int getterIndex,
+                                     int combinerIndex,
+                                     params IDefValueGetter<T>[] getters)
+            : base(name, id, description, getterIndex, combinerIndex, getters) {
+            this.getDefs = getDefs;
+        }
+
+        public override TextValue Copy()
+            => CopyTo(new TextValueDefsConcrete<T>(Name, ID, Description));
+
+        protected TextValueDefsConcrete<T> CopyTo(TextValueDefsConcrete<T> other) {
+            other.getDefs = getDefs;
+            base.CopyTo(other);
+            return other;
+        }
+
+        protected override IEnumerable<T> GetDefs(BillMenuEntry entry) => getDefs(entry);
     }
 }

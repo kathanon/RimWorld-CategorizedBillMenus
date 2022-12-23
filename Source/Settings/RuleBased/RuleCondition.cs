@@ -19,8 +19,8 @@ namespace CategorizedBillMenus {
         private bool onCopied = false;
         private bool onMoved  = true;
 
-        protected RuleCondition(string name, string description)
-            : base(name, description) {}
+        protected RuleCondition(string name, string id, string description)
+            : base(name, id, description) {}
 
         public bool OnCopied => onCopied;
         public bool OnMoved => onMoved;

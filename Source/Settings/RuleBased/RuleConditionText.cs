@@ -18,7 +18,7 @@ namespace CategorizedBillMenus {
         }
 
         public RuleConditionText()
-            : base(Strings.CondTextName, Strings.CondTextDesc) { }
+            : base(Strings.CondTextName, Strings.CondTextID, Strings.CondTextDesc) { }
 
         public RuleConditionText(TextValue value, TextOperation comparison, string expected)
                 : this() {
@@ -47,21 +47,26 @@ namespace CategorizedBillMenus {
             => Complete && value.Compare(comparison, entry, parent, expected);
 
         protected override void DoSettingsOpen(WidgetRow row, Rect rect, ref float curY) {
-            row.SelectMenuButton(value, v => value = v);
+            row.SelectMenuButton(value, SetValue);
             value?.DoSettings(row, rect, ref curY);
             row.SelectMenuButton(comparison, c => comparison = c);
             comparison?.DoSettings(row, rect, ref curY);
             row.TextField(ref expected, ref curY);
+
+            void SetValue(TextValue v) {
+                value = v;
+                value.Setup();
+            }
         }
 
-        public override string SettingsClosedLabel 
+        public override string SettingsClosedLabel(CategoryRule rule)
             => $"{Strings.CondTextName} {value?.SettingsClosedLabel} {comparison?.SettingsClosedLabel} \"{expected}\"";
 
         public override void ExposeData() {
             base.ExposeData();
-            Scribe_Deep.Look  (ref value,      "value");
-            Scribe_Deep.Look  (ref comparison, "comparison");
-            Scribe_Values.Look(ref expected,   "expected");
+            TextValue    .Registerable_Look(ref value,      "value");
+            TextOperation.Registerable_Look(ref comparison, "comparison");
+            Scribe_Values.Look      (ref expected,   "expected");
         }
     }
 }

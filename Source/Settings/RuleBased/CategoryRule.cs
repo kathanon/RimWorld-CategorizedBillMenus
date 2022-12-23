@@ -1,12 +1,6 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using UnityEngine;
 using Verse;
-using Verse.Noise;
 
 namespace CategorizedBillMenus {
     public class CategoryRule : IExposable {
@@ -27,7 +21,7 @@ namespace CategorizedBillMenus {
         private RuleAction action;
         private bool allowAfter;
 
-        private bool open = true;
+        private bool open = false;
 
         public bool AllowAfter { 
             get => allowAfter; 
@@ -59,11 +53,14 @@ namespace CategorizedBillMenus {
         public bool AppliesOn(bool copy, bool moved) 
             => (!copy || OnCopied) && (!moved || OnMoved);
 
-        public CategoryRule Copy() => new CategoryRule(condition.Copy(), action.Copy());
+        public void Open() => open = true;
+
+        public CategoryRule Copy() 
+            => new CategoryRule(condition.Copy(), action.Copy());
 
         public virtual void ExposeData() {
-            Scribe_Deep.Look(ref condition, "condition");
-            Scribe_Deep.Look(ref action, "action");
+            RuleCondition.Registerable_Look(ref condition, "condition");
+            RuleAction   .Registerable_Look(ref action,    "action");
             Scribe_Values.Look(ref allowAfter, "allowAfter");
         }
 
@@ -91,11 +88,10 @@ namespace CategorizedBillMenus {
                 curY = Mathf.Max(y1, y2);
             } else {
                 var textRect = new Rect(rect.x + RuleIconSpace, curY, rect.width - RuleIconSpace, CheckboxSize);
-                string conditionText = condition?.SettingsClosedLabel ?? "-";
-                string actionText = action?.SettingsClosedLabel ?? "-";
+                string conditionText = condition?.SettingsClosedLabel(this) ?? "-";
+                string actionText = action?.SettingsClosedLabel(this) ?? "-";
                 string text = $"{Strings.ConditionPrefix} {conditionText} {Strings.ActionPrefix} {actionText}";
                 Widgets.Label(textRect, text);
-
             }
         }
 

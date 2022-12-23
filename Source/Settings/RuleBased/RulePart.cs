@@ -7,7 +7,7 @@ using UnityEngine;
 using Verse;
 
 namespace CategorizedBillMenus {
-    public abstract class RulePart<T> : Registerable<T>, ISettingsEntry where T : RulePart<T> {
+    public abstract class RulePart<T> : RegisterableById<T>, ISettingsEntry where T : RulePart<T> {
         public const UIDirection Dir    = UIDirection.RightThenDown;
         public const float Margin       = Settings.Margin;
         public const float SmallMargin  = CategoryRule.SmallMargin;
@@ -15,11 +15,13 @@ namespace CategorizedBillMenus {
         public const float RuleIconYAdj = CategoryRule.RuleIconYAdj;
         public const float RowHeight    = CategoryRule.RowHeight;
 
-        protected RulePart(string name, string description) : base(name, description) {}
+
+        protected RulePart(string name, string id, string description) 
+            : base(name, id, description) {}
 
         protected virtual void DoSettingsOpen(WidgetRow row, Rect rect, ref float curY) {}
 
-        public virtual string SettingsClosedLabel => Name;
+        public virtual string SettingsClosedLabel(CategoryRule rule) => Name;
 
         public abstract int NumToggles { get; }
 

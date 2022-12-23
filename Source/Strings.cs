@@ -10,6 +10,29 @@ namespace CategorizedBillMenus {
         public const string ID   = "kathanon.CategorizedBillMenus";
         public const string Name = "Categorized Bill Menus";
 
+        // Identifiers for saving and determining "same-ness"
+        public const string ValueLabelID           = "label";
+        public const string ValueDefNameID         = "def";
+        public const string ValueRecipeID          = "recipe";
+        public const string ValueLimbID            = "limb";
+        public const string ValueResearchID        = "research";
+        public const string ValueSingleProductID   = "productSingle";
+        public const string ValueProductID         = "productAll";
+        public const string ValueIngredientFixedID = "ingredientFixed";
+        public const string ValueIngredientAllID   = "ingredientAll";
+        public const string ValueCategoryID        = "category";
+
+        public const string CondTextID    = "text";
+        public const string CondSurgeryID = "surgery";
+        public const string CondOrID      = "or";
+        public const string CondAndID     = "and";
+        public const string CondNotID     = "not";
+
+        public const string ActionByLimbID     = "byLimb";
+        public const string ActionByResearchID = "byResearch";
+        public const string ActionNamedID      = "named";
+        public const string ActionNoopID       = "noop";
+
         // Strings.xml
         public static readonly string FavCat        = (ID + ".FavCat"       ).Translate();
         public static readonly string NoBodyPartCat = (ID + ".NoBodyPartCat").Translate();
@@ -46,6 +69,7 @@ namespace CategorizedBillMenus {
         public static readonly string ActionByResearchDesc = (ID + ".ActionByResearchDesc").Translate();
         public static readonly string ActionNoopName       = (ID + ".ActionNoopName"      ).Translate();
         public static readonly string ActionNoopDesc       = (ID + ".ActionNoopDesc"      ).Translate();
+        public static readonly string ActionNoopStop       = (ID + ".ActionNoopStop"      ).Translate();
 
         public static readonly string CondSurgeryName = (ID + ".CondSurgeryName").Translate();
         public static readonly string CondSurgeryDesc = (ID + ".CondSurgeryDesc").Translate();
@@ -58,14 +82,24 @@ namespace CategorizedBillMenus {
         public static readonly string CondTextName    = (ID + ".CondTextName"   ).Translate();
         public static readonly string CondTextDesc    = (ID + ".CondTextDesc"   ).Translate();
 
+        public static readonly string ValueLabelName           = (ID + ".ValueLabelName"          ).Translate();
+        public static readonly string ValueDefNameName         = (ID + ".ValueDefNameName"        ).Translate();
         public static readonly string ValueResearchName        = (ID + ".ValueResearchName"       ).Translate();
         public static readonly string ValueResearchDesc        = (ID + ".ValueResearchDesc"       ).Translate();
+        public static readonly string ValueSingleProductName   = (ID + ".ValueSingleProductName"  ).Translate();
+        public static readonly string ValueSingleProductDesc   = (ID + ".ValueSingleProductDesc"  ).Translate();
+        public static readonly string ValueProductName         = (ID + ".ValueProductName"        ).Translate();
+        public static readonly string ValueProductDesc         = (ID + ".ValueProductDesc"        ).Translate();
         public static readonly string ValueIngredientFixedName = (ID + ".ValueIngredientFixedName").Translate();
         public static readonly string ValueIngredientFixedDesc = (ID + ".ValueIngredientFixedDesc").Translate();
         public static readonly string ValueIngredientAllName   = (ID + ".ValueIngredientAllName"  ).Translate();
         public static readonly string ValueIngredientAllDesc   = (ID + ".ValueIngredientAllDesc"  ).Translate();
+        public static readonly string ValueCategoryName        = (ID + ".ValueCategoryName"       ).Translate();
+        public static readonly string ValueCategoryDesc        = (ID + ".ValueCategoryDesc"       ).Translate();
         public static readonly string ValueRecipeName          = (ID + ".ValueRecipeName"         ).Translate();
         public static readonly string ValueRecipeDesc          = (ID + ".ValueRecipeDesc"         ).Translate();
+        public static readonly string ValueLimbName            = (ID + ".ValueLimbName"           ).Translate();
+        public static readonly string ValueLimbDesc            = (ID + ".ValueLimbDesc"           ).Translate();
 
         public static readonly string ConditionPrefix   = (ID + ".ConditionPrefix"  ).Translate();
         public static readonly string ActionPrefix      = (ID + ".ActionPrefix"     ).Translate();

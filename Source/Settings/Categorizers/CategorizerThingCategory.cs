@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using static CategorizedBillMenus.ScribeUtils;
 
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
@@ -80,7 +81,7 @@ namespace CategorizedBillMenus {
             base.ExposeData();
             Scribe_Collections.Look(ref disabledCats, "disabled", LookMode.Value);
 
-            if (Scribe.mode == LoadSaveMode.PostLoadInit) {
+            if (PostLoadInit) {
                 Setup();
             }
         }

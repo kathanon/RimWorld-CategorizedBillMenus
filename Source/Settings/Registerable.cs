@@ -41,6 +41,9 @@ namespace CategorizedBillMenus {
             }
         }
 
+        public virtual bool IsSame(Registerable<T> other) 
+            => GetType() == other?.GetType() && Name == other?.Name;
+
         public static void SelectionMenu(Action<T> set, T notIfSame = null) {
             var menu = Available.Select(x => MenuOption(x, set, notIfSame, 0));
             Find.WindowStack.Add(new FloatMenu(menu.ToList()));
@@ -56,7 +59,7 @@ namespace CategorizedBillMenus {
             } else {
                 return new FloatMenuOption(
                     elem.Name,
-                    () => { if (elem.GetType() != notIfSame?.GetType()) set(elem); },
+                    () => { if (!elem.IsSame(notIfSame)) set(elem); },
                     mouseoverGuiAction: r => TooltipHandler.TipRegion(r, elem.Description));
             }
         }

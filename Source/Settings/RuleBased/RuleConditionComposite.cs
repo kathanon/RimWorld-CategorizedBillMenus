@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using static CategorizedBillMenus.ScribeUtils;
 
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]
@@ -15,11 +16,8 @@ namespace CategorizedBillMenus {
             Register(new RuleConditionOr());
         }
 
-        public RuleConditionOr()
-            : base(Strings.CondOrName, Strings.CondOrDesc) { }
-
         public RuleConditionOr(params RuleCondition[] initial)
-            : base(Strings.CondOrName, Strings.CondOrDesc, true, initial) { }
+            : base(Strings.CondOrName, Strings.CondOrID, Strings.CondOrDesc, true, initial) { }
 
         public override RuleCondition Copy() => new RuleConditionOr();
 
@@ -33,11 +31,8 @@ namespace CategorizedBillMenus {
             Register(new RuleConditionAnd());
         }
 
-        public RuleConditionAnd()
-            : base(Strings.CondAndName, Strings.CondAndDesc) { }
-
         public RuleConditionAnd(params RuleCondition[] initial)
-            : base(Strings.CondAndName, Strings.CondAndDesc, true, initial) { }
+            : base(Strings.CondAndName, Strings.CondAndID, Strings.CondAndDesc, true, initial) { }
 
         public override RuleCondition Copy() => new RuleConditionAnd();
 
@@ -51,11 +46,8 @@ namespace CategorizedBillMenus {
             Register(new RuleConditionNot());
         }
 
-        public RuleConditionNot()
-            : base(Strings.CondNotName, Strings.CondNotDesc, false) { }
-
         public RuleConditionNot(params RuleCondition[] initial)
-            : base(Strings.CondNotName, Strings.CondNotDesc, false, initial) { }
+            : base(Strings.CondNotName, Strings.CondNotID, Strings.CondNotDesc, false, initial) { }
 
         public override RuleCondition Copy() => new RuleConditionNot();
 
@@ -68,16 +60,17 @@ namespace CategorizedBillMenus {
         protected List<RuleCondition> parts = new List<RuleCondition>();
         private readonly bool multiple;
 
-        protected RuleConditionComposite(string name, string description, bool multiple = true) 
-                : base(name, description) {
+        protected RuleConditionComposite(
+            string name, string id, string description, bool multiple = true) 
+            : base(name, id, description) {
             this.multiple = multiple;
             if (!multiple) parts.Add(null);
         }
 
         protected RuleConditionComposite(
-                string name, string description, bool multiple = true,
+                string name, string id, string description, bool multiple = true,
                 params RuleCondition[] initial) 
-                : base(name, description) {
+                : base(name, id, description) {
             this.multiple = multiple;
             parts.AddRange(initial);
             if (!multiple && parts.Count == 0) {
@@ -116,13 +109,13 @@ namespace CategorizedBillMenus {
             }
         }
 
-        public override string SettingsClosedLabel 
+        public override string SettingsClosedLabel(CategoryRule rule)
             => multiple ? $"{Name}... ({parts.Count} conditions)" 
-                        : $"{Name} {parts[0]?.SettingsClosedLabel ?? "-"}";
+                        : $"{Name} {parts[0]?.SettingsClosedLabel(rule) ?? "-"}";
 
         public override void ExposeData() {
             base.ExposeData();
-            Scribe_Collections.Look(ref parts, "parts", LookMode.Deep);
+            Registerable_Look(ref parts, "parts");
         }
     }
 }
