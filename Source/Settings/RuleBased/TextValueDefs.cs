@@ -29,9 +29,6 @@ namespace CategorizedBillMenus {
             index = combinerIndex;
         }
 
-        protected TextValueDefs(string name, string id, string description, float _) 
-            : base(name, id, description, 0f) {}
-
         protected TextValueDefs<T> CopyTo(TextValueDefs<T> other) {
             other.index = index;
             base.CopyTo(other);
@@ -69,9 +66,6 @@ namespace CategorizedBillMenus {
     public class TextValueDefsConcrete<T> : TextValueDefs<T> where T : Def {
         private Func<BillMenuEntry, IEnumerable<T>> getDefs;
 
-        private TextValueDefsConcrete(string name, string id, string description)
-            : base(name, id, description, 0f) { }
-
         public TextValueDefsConcrete(string name,
                                      string id, 
                                      string description,
@@ -84,7 +78,7 @@ namespace CategorizedBillMenus {
         }
 
         public override TextValue Copy()
-            => CopyTo(new TextValueDefsConcrete<T>(Name, ID, Description));
+            => CopyTo(new TextValueDefsConcrete<T>(Name, ID, Description, null, 0, 0));
 
         protected TextValueDefsConcrete<T> CopyTo(TextValueDefsConcrete<T> other) {
             other.getDefs = getDefs;

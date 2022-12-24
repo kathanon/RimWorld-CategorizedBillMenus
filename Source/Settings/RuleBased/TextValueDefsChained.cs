@@ -14,10 +14,6 @@ namespace CategorizedBillMenus {
         protected static void RegisterGetter(Func<IDefValueGetter<TPrev>> create)
             => TextValueDef<TPrev>.RegisterGetter(create);
 
-        protected TextValueDefsChained(string name, string id, string description, float _) 
-            : base(name, id, description, _) {
-        }
-
         protected TextValueDefsChained(
                 string name, string id, string description, 
                 int combinerIndex = 0, int getterIndex = 0, 
@@ -43,9 +39,6 @@ namespace CategorizedBillMenus {
 
         private Func<TPrev, IEnumerable<TNext>> getDefs;
 
-        private TextValueDefsChainedConcrete(string name, string id, string description)
-            : base(name, id, description, 0f) {}
-
         public TextValueDefsChainedConcrete(string name,
                                             string id,
                                             string description,
@@ -58,7 +51,7 @@ namespace CategorizedBillMenus {
         }
 
         public override TextValue Copy()
-            => CopyTo(new TextValueDefsChainedConcrete<TPrev, TNext>(Name, ID, Description));
+            => CopyTo(new TextValueDefsChainedConcrete<TPrev, TNext>(Name, ID, Description, null, 0, 0));
 
         protected TextValueDefsChainedConcrete<TPrev, TNext>
                 CopyTo(TextValueDefsChainedConcrete<TPrev, TNext> other) {

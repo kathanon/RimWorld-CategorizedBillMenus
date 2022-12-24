@@ -71,14 +71,21 @@ namespace CategorizedBillMenus {
             index = getterIndex;
         }
 
-        protected TextValueDef(string name, string id, string description, float _) 
-            : base(name, id, description) {}
-
         public override void Setup() {
             if (needSetup) {
                 getters.AddRange(registeredGetters.Select(f => f()));
                 needSetup = false;
             }
+        }
+
+        public bool TrySetGetter(string id) {
+            for (int i = 0; i < getters.Count; i++) {
+                if (getters[i].ID == id) {
+                    SetupGetter(i);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void SetGetter(IDefValueGetter<T> getter) {
@@ -94,9 +101,10 @@ namespace CategorizedBillMenus {
         }
 
         protected TextValueDef<T> CopyTo(TextValueDef<T> other) {
-            other.getters = getters;
-            other.index = index;
-            Getter.CopyToGetter(other.Getter);
+            other.Setup();
+            if (other.TrySetGetter(Getter.ID)) {
+                Getter.CopyToGetter(other.Getter);
+            }
             return other;
         }
 
@@ -161,9 +169,6 @@ namespace CategorizedBillMenus {
     public class TextValueDefConcrete<T> : TextValueDef<T> where T : Def {
         private Func<BillMenuEntry, T> getDef;
 
-        private TextValueDefConcrete(string name, string id, string description) 
-            : base(name, id, description, 0f) {}
-
         public TextValueDefConcrete(string name,
                                     string id,
                                     string description,
@@ -175,7 +180,7 @@ namespace CategorizedBillMenus {
         }
 
         public override TextValue Copy() 
-            => CopyTo(new TextValueDefConcrete<T>(Name, ID, Description));
+            => CopyTo(new TextValueDefConcrete<T>(Name, ID, Description, null, 0));
 
         protected TextValueDefConcrete<T> CopyTo(TextValueDefConcrete<T> other) {
             other.getDef = getDef;
