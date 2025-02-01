@@ -4,7 +4,9 @@
   <PropertyGroup>
     <ModName>CategorizedBillMenus</ModName>
     <ModId>kathanon.$(ModName)</ModId>
-    <MultiVersion>false</MultiVersion>
+    <MultiVersion>true</MultiVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
@@ -15,7 +17,7 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>12.0</LangVersion>
   </PropertyGroup>
   <!-- Import base build file -->
   <Import Project="RimWorld.targets" />
@@ -56,7 +58,8 @@
       <HintPath>$(HarmonyPath)</HintPath>
     </Reference>
     <Reference Include="FloatSubMenu" Private="False">
-      <HintPath>$(FloatSubMenuPath)</HintPath>
+      <!-- <HintPath>$(FloatSubMenuPath)</HintPath> -->
+      <HintPath>$(RimWorld)\Mods\FloatSubMenu\$(RimWorldVersion)\Assemblies\FloatSubMenu.dll</HintPath>
     </Reference>
     <!-- Other Dlls -->
     <Reference Include="System" />
@@ -70,16 +73,18 @@
   <ItemGroup>
     <Compile Include="BillMenuEntry.cs" />
     <Compile Include="BillStack_Patches.cs" />
-    <Compile Include="ScribeUtils.cs" />
+    <Compile Include="CurrentModeShorthands.cs" />
+    <Compile Include="MyDefOf.cs" />
     <Compile Include="Settings\Categorizers\CategorizerManual.cs" />
     <Compile Include="Settings\Categorizers\CategorizerRuleBased.cs" />
     <Compile Include="Settings\Categorizers\Categorizer.cs" />
     <Compile Include="Settings\Categorizers\CategorizerThingCategory.cs" />
     <Compile Include="Settings\Categorizers\CategorizerEditable.cs" />
     <Compile Include="Settings\Categorizers\CategorizerSingleton.cs" />
-    <Compile Include="Settings\RegisterableId.cs" />
+    <Compile Include="Settings\RegisterableById.cs" />
     <Compile Include="Settings\RuleBased\CategoryRule.cs" />
     <Compile Include="CheckValue.cs" />
+    <Compile Include="Settings\RuleBased\RuleActionByMod.cs" />
     <Compile Include="Settings\RuleBased\TextValueDefChained.cs" />
     <Compile Include="Settings\RuleBased\TextValueDefsChained.cs" />
     <Compile Include="Settings\RuleBased\RuleActionNamed.cs" />
@@ -111,46 +116,17 @@
   </ItemGroup>
   <!-- Include ModFiles -->
   <ItemGroup>
-    <None Include="..\ModFiles\About\About.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>About\About.xml</Link>
+    <None Include="$(ModFiles)\**" CopyToOutputDirectory="PreserveNewest">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
     </None>
-    <None Include="..\ModFiles\About\Preview.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>About\Preview.png</Link>
-    </None>
-    <None Include="..\ModFiles\About\PublishedFileId.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>About\PublishedFileId.txt</Link>
-    </None>
-    <None Include="..\ModFiles\Languages\English\Keyed\Categorizers.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>Languages\English\Keyed\Categorizers.xml</Link>
-    </None>
-    <None Include="..\ModFiles\Languages\English\Keyed\Rules.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>Languages\English\Keyed\Rules.xml</Link>
-    </None>
-    <None Include="..\ModFiles\Languages\English\Keyed\Settings.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>Languages\English\Keyed\Settings.xml</Link>
-    </None>
-    <None Include="..\ModFiles\Languages\English\Keyed\Strings.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>Languages\English\Keyed\Strings.xml</Link>
-    </None>
-    <None Include="..\ModFiles\Textures\kathanon.CategorizedBillMenus\EditIcon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>Textures\kathanon.CategorizedBillMenus\EditIcon.png</Link>
-    </None>
-    <None Include="..\ModFiles\Textures\kathanon.CategorizedBillMenus\FavIcon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>Textures\kathanon.CategorizedBillMenus\FavIcon.png</Link>
-    </None>
-    <None Include="..\ModFiles\Textures\kathanon.CategorizedBillMenus\NoIcon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>Textures\kathanon.CategorizedBillMenus\NoIcon.png</Link>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <!-- Use PolySharp to enable runtime-agnostic language features -->
+  <Import Project="..\packages\PolySharp.1.10.0\build\PolySharp.targets" Condition="Exists('..\packages\PolySharp.1.10.0\build\PolySharp.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\PolySharp.1.10.0\build\PolySharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PolySharp.1.10.0\build\PolySharp.targets'))" />
+  </Target>
 </Project>

@@ -12,7 +12,9 @@ namespace CategorizedBillMenus {
         public const float Margin   = Settings.Margin;
         public const float IconStep = IconSize + Margin;
         public const float IconMid  = IconSize / 2;
+        private static readonly Color disabled = new Color(1f, 1f, 1f, 0.5f);
         public static Texture2D[] collapseIcons = { TexButton.Reveal, TexButton.Collapse };
+        public static Texture2D[] noIcons       = { null, null };
         public static string[]    collapseTips  = { Strings.OpenTooltip, Strings.ClosedTooltip };
 
         public static void ForceGap(this WidgetRow row, float width) {
@@ -21,12 +23,20 @@ namespace CategorizedBillMenus {
             }
         }
 
+        public static bool EditButton(Rect rect, ref bool editing, string[] tips, bool enabled = true) 
+            => ToggleButton(rect, ref editing, noIcons, tips, Textures.EditIcon, enabled: enabled);
 
-        public static void CollapseButton(Rect rect, ref bool open) 
-            => ToggleButton(rect, ref open, collapseIcons, collapseTips);
+        public static bool CollapseButton(Rect rect, ref bool open, bool enabled = true) 
+            => ToggleButton(rect, ref open, collapseIcons, collapseTips, enabled: enabled);
 
-        public static void ToggleButton(
-                Rect rect, ref bool value, Texture2D[] icons, string[] tips, Texture2D button = null, float iconXAdj = 0f) {
+        public static bool ToggleButton(Rect rect,
+                                        ref bool value,
+                                        Texture2D[] icons,
+                                        string[] tips,
+                                        Texture2D button = null,
+                                        float iconXAdj = 0f,
+                                        bool enabled = true) {
+            bool ret = false;
             int i = value ? 1 : 0;
             TooltipHandler.TipRegion(rect, tips[i]);
             Texture2D overlay = icons[i];
@@ -36,12 +46,23 @@ namespace CategorizedBillMenus {
             }
             if (Widgets.ButtonImage((iconXAdj == 0) ? rect : rect.ExpandedBy(iconXAdj, 0f), button)) {
                 value = !value;
+                ret = true;
             }
             if (overlay != null) {
-                Widgets.DrawTextureFitted(rect, overlay, 1f);
+                GUI.DrawTexture(rect, overlay);
             }
+            return ret;
         }
 
+        public static bool DisabledIcon(Rect rect, Texture2D icon) {
+            GUI.color = disabled;
+            GUI.DrawTexture(rect, icon);
+            GUI.color = Color.white;
+            return false;
+        }
+
+        public static bool ButtonImage(Rect rect, Texture2D icon, bool enabled = true) 
+            => enabled ? Widgets.ButtonImage(rect, icon) : DisabledIcon(rect, icon);
 
         public static bool TextField(
                 this WidgetRow row, ref string text, float min = 80f, float max = 120f) {

@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace CategorizedBillMenus;
+public abstract class CategorizerSingleton : Categorizer {
+    protected CategorizerSingleton(string name, string description) 
+        : base(name, description, false) {}
 
-namespace CategorizedBillMenus {
-    public abstract class CategorizerSingleton : Categorizer {
-        protected CategorizerSingleton(string name, string description) 
-            : base(name, description, false) {}
+    public override bool Singleton => true;
 
-        public override bool Singleton => true;
-
-        public override Categorizer Copy() => this;
-    }
+    public override Categorizer Copy() => this;
 }

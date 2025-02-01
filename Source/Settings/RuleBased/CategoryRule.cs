@@ -65,7 +65,7 @@ namespace CategorizedBillMenus {
         }
 
         public void DoSettings(Rect rect, ref float curY) {
-            float width = (rect.width + Margin) / 2;
+            float width = Mathf.Round((rect.width - Margin) * 0.65f);
             var row = new WidgetRow();
             float y1 = curY, y2 = curY;
 

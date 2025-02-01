@@ -10,9 +10,13 @@ namespace CategorizedBillMenus {
         public const string ID   = "kathanon.CategorizedBillMenus";
         public const string Name = "Categorized Bill Menus";
 
+        // Vanilla strings
+        public static readonly string Administer = "RecipeAdminister".Translate("").Trim();
+
         // Identifiers for saving and determining "same-ness"
         public const string ValueLabelID           = "label";
         public const string ValueDefNameID         = "def";
+        public const string ValueModID             = "mod";
         public const string ValueRecipeID          = "recipe";
         public const string ValueLimbID            = "limb";
         public const string ValueResearchID        = "research";
@@ -30,6 +34,7 @@ namespace CategorizedBillMenus {
 
         public const string ActionByLimbID     = "byLimb";
         public const string ActionByResearchID = "byResearch";
+        public const string ActionByModID      = "byMod";
         public const string ActionNamedID      = "named";
         public const string ActionNoopID       = "noop";
 
@@ -47,6 +52,8 @@ namespace CategorizedBillMenus {
         public static readonly string OpenTooltip       = (ID + ".OpenTooltip"      ).Translate();
         public static readonly string ClosedTooltip     = (ID + ".ClosedTooltip"    ).Translate();
         public static readonly string CollapseOption    = (ID + ".CollapseOption"   ).Translate();
+        public static readonly string RightAlignOption  = (ID + ".RightAlignOption" ).Translate();
+        public static readonly string SearchOption      = (ID + ".SearchOption"     ).Translate();
         public static readonly string NoneSelectedLabel = (ID + ".NoneSelectedLabel").Translate();
 
         public static readonly string RuleBasedName  = (ID + ".RuleBasedName" ).Translate();
@@ -60,16 +67,26 @@ namespace CategorizedBillMenus {
         public static readonly string CategoriesName = (ID + ".CategoriesName").Translate();
         public static readonly string CategoriesDesc = (ID + ".CategoriesDesc").Translate();
 
+        private const string SearchIfOptionKey = ID + ".SearchIfOption";
+        public static string SearchIfOption(int n) => SearchIfOptionKey.Translate(n);
+
+
         // Rules.xml
-        public static readonly string ActionByLimbName     = (ID + ".ActionByLimbName"    ).Translate();
-        public static readonly string ActionByLimbDesc     = (ID + ".ActionByLimbDesc"    ).Translate();
-        public static readonly string ActionNamedName      = (ID + ".ActionNamedName"     ).Translate();
-        public static readonly string ActionNamedDesc      = (ID + ".ActionNamedDesc"     ).Translate();
-        public static readonly string ActionByResearchName = (ID + ".ActionByResearchName").Translate();
-        public static readonly string ActionByResearchDesc = (ID + ".ActionByResearchDesc").Translate();
-        public static readonly string ActionNoopName       = (ID + ".ActionNoopName"      ).Translate();
-        public static readonly string ActionNoopDesc       = (ID + ".ActionNoopDesc"      ).Translate();
-        public static readonly string ActionNoopStop       = (ID + ".ActionNoopStop"      ).Translate();
+        public static readonly string ActionByLimbName         = (ID + ".ActionByLimbName"        ).Translate();
+        public static readonly string ActionByLimbDesc         = (ID + ".ActionByLimbDesc"        ).Translate();
+        public static readonly string ActionByLimbPlain        = (ID + ".ActionByLimbPlain"       ).Translate();
+        public static readonly string ActionByLimbPlainDesc    = (ID + ".ActionByLimbPlainDesc"   ).Translate();
+        public static readonly string ActionByLimbAnnotate     = (ID + ".ActionByLimbAnnotate"    ).Translate();
+        public static readonly string ActionByLimbAnnotateDesc = (ID + ".ActionByLimbAnnotateDesc").Translate();
+        public static readonly string ActionNamedName          = (ID + ".ActionNamedName"         ).Translate();
+        public static readonly string ActionNamedDesc          = (ID + ".ActionNamedDesc"         ).Translate();
+        public static readonly string ActionByResearchName     = (ID + ".ActionByResearchName"    ).Translate();
+        public static readonly string ActionByResearchDesc     = (ID + ".ActionByResearchDesc"    ).Translate();
+        public static readonly string ActionByModName          = (ID + ".ActionByModName"         ).Translate();
+        public static readonly string ActionByModDesc          = (ID + ".ActionByModDesc"         ).Translate();
+        public static readonly string ActionNoopName           = (ID + ".ActionNoopName"          ).Translate();
+        public static readonly string ActionNoopDesc           = (ID + ".ActionNoopDesc"          ).Translate();
+        public static readonly string ActionNoopStop           = (ID + ".ActionNoopStop"          ).Translate();
 
         public static readonly string CondSurgeryName = (ID + ".CondSurgeryName").Translate();
         public static readonly string CondSurgeryDesc = (ID + ".CondSurgeryDesc").Translate();
@@ -84,6 +101,7 @@ namespace CategorizedBillMenus {
 
         public static readonly string ValueLabelName           = (ID + ".ValueLabelName"          ).Translate();
         public static readonly string ValueDefNameName         = (ID + ".ValueDefNameName"        ).Translate();
+        public static readonly string ValueModName             = (ID + ".ValueModName"            ).Translate();
         public static readonly string ValueResearchName        = (ID + ".ValueResearchName"       ).Translate();
         public static readonly string ValueResearchDesc        = (ID + ".ValueResearchDesc"       ).Translate();
         public static readonly string ValueSingleProductName   = (ID + ".ValueSingleProductName"  ).Translate();
@@ -101,6 +119,11 @@ namespace CategorizedBillMenus {
         public static readonly string ValueLimbName            = (ID + ".ValueLimbName"           ).Translate();
         public static readonly string ValueLimbDesc            = (ID + ".ValueLimbDesc"           ).Translate();
 
+        public static readonly string PresetPrimitive = (ID + ".PresetPrimitive").Translate();
+        public static readonly string PresetDrugs     = (ID + ".PresetDrugs"    ).Translate();
+        public static readonly string PresetFertility = (ID + ".PresetFertility").Translate();
+        public static readonly string PresetAmputate  = (ID + ".PresetAmputate" ).Translate();
+
         public static readonly string ConditionPrefix   = (ID + ".ConditionPrefix"  ).Translate();
         public static readonly string ActionPrefix      = (ID + ".ActionPrefix"     ).Translate();
         public static readonly string AllowAfterNoTips  = (ID + ".AllowAfterNoTips" ).Translate();
@@ -111,5 +134,10 @@ namespace CategorizedBillMenus {
         public static readonly string OnCopiedYesTip    = (ID + ".OnCopiedYesTip"   ).Translate();
         public static readonly string OnMovedNoTip      = (ID + ".OnMovedNoTip"     ).Translate();
         public static readonly string OnMovedYesTip     = (ID + ".OnMovedYesTip"    ).Translate();
+
+        // Parameterized
+        private const string ActionByLimbAnnotatePatternID = ID + ".ActionByLimbAnnotatePattern";
+        public static string ActionByLimbAnnotatePattern(string limb, string annotation) 
+            => ActionByLimbAnnotatePatternID.Translate(limb, annotation);
     }
 }

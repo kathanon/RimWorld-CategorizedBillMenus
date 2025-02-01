@@ -11,11 +11,10 @@ namespace CategorizedBillMenus {
     using CombinerFunc = Func<IEnumerable<bool>, Func<bool, bool>, bool>;
 
     public abstract class TextValueDefs<T> : TextValueDef<T> where T : Def {
-        private static readonly List<(string name, CombinerFunc func)> combiners = 
-            new List<(string name, CombinerFunc)>{
+        private static readonly List<(string name, CombinerFunc func)> combiners = [
                 ("any", Enumerable.Any),
                 ("all", Enumerable.All),
-            };
+            ];
 
         private int index = 0;
 

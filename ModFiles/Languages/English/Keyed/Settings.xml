@@ -9,13 +9,16 @@
    <kathanon.CategorizedBillMenus.OpenTooltip>Collapse</kathanon.CategorizedBillMenus.OpenTooltip>
    <kathanon.CategorizedBillMenus.ClosedTooltip>Expand</kathanon.CategorizedBillMenus.ClosedTooltip>
    <kathanon.CategorizedBillMenus.CollapseOption>Collapse sub-menus with only one item</kathanon.CategorizedBillMenus.CollapseOption>
+   <kathanon.CategorizedBillMenus.SearchOption>Add quick search field to menu</kathanon.CategorizedBillMenus.SearchOption>
+   <kathanon.CategorizedBillMenus.SearchIfOption>if it contains at least {0} recipes</kathanon.CategorizedBillMenus.SearchIfOption>
+   <kathanon.CategorizedBillMenus.RightAlignOption>Align info and favorite icons to the right</kathanon.CategorizedBillMenus.RightAlignOption>
    <kathanon.CategorizedBillMenus.NoneSelectedLabel>(select)</kathanon.CategorizedBillMenus.NoneSelectedLabel>
 
    <kathanon.CategorizedBillMenus.RuleBasedName>Rule-based</kathanon.CategorizedBillMenus.RuleBasedName>
    <kathanon.CategorizedBillMenus.RuleBasedDesc>Applies an editable list of simple rules.</kathanon.CategorizedBillMenus.RuleBasedDesc>
-   <kathanon.CategorizedBillMenus.ByLimbName>Medical - By Body Part</kathanon.CategorizedBillMenus.ByLimbName>
+   <kathanon.CategorizedBillMenus.ByLimbName>Medical - By body part</kathanon.CategorizedBillMenus.ByLimbName>
    <kathanon.CategorizedBillMenus.ByLimbDesc>Organizes operation bills after what body part they apply to.</kathanon.CategorizedBillMenus.ByLimbDesc>
-   <kathanon.CategorizedBillMenus.ByTypeName>Medical - By Type</kathanon.CategorizedBillMenus.ByTypeName>
+   <kathanon.CategorizedBillMenus.ByTypeName>Medical - By type</kathanon.CategorizedBillMenus.ByTypeName>
    <kathanon.CategorizedBillMenus.ByTypeDesc>Organizes operation bills after the type of procedure.</kathanon.CategorizedBillMenus.ByTypeDesc>
    <kathanon.CategorizedBillMenus.ManualName>Manual</kathanon.CategorizedBillMenus.ManualName>
    <kathanon.CategorizedBillMenus.ManualDesc>Freely reorder recipies and categories, as well as add new categories.</kathanon.CategorizedBillMenus.ManualDesc>

@@ -3,13 +3,14 @@
 	<author>kathanon</author>
     <packageId>kathanon.CategorizedBillMenus</packageId>
 	<supportedVersions>
+		<li>1.5</li>
 		<li>1.4</li>
 	</supportedVersions>
-	<description>Splits the "Add bill" menu into sub-menus by the categories of the products. 
+	<description>Splits the "Add bill" menu into sub-menus. Highly configurable.
+    
+Default is to make sub-menus according to the way the products would be categorized in a storage settings dialog. For operations the default is to split them by type. There is also a preset for splitting by body part.
 
 Also adds a "Favorites" sub-menu (if any favorited recipes are available). Use the star icon to favorite a recipe. Styled items connected to an ideoligion use the same recipe, and are not favorited separately. They will appear in the favorites menu if the base recipe is favorited.
-
-What categories to make sub-menus for is configurable. Any category that would result in a sub-menu containing only one item is automatically excluded.
 
 Safe to add or remove at any point.</description>
 	<url>https://github.com/kathanon/RimWorld-CategorizedBillMenus</url>

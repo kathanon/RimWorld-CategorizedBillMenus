@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
    <kathanon.CategorizedBillMenus.ActionByLimbName>by body part</kathanon.CategorizedBillMenus.ActionByLimbName>
-   <kathanon.CategorizedBillMenus.ActionByLimbDesc>Sort operations based on the target body part</kathanon.CategorizedBillMenus.ActionByLimbDesc>
+   <kathanon.CategorizedBillMenus.ActionByLimbDesc>Categorize operations based on the target body part</kathanon.CategorizedBillMenus.ActionByLimbDesc>
+   <kathanon.CategorizedBillMenus.ActionByLimbPlain>plain</kathanon.CategorizedBillMenus.ActionByLimbPlain>
+   <kathanon.CategorizedBillMenus.ActionByLimbPlainDesc>Just use the label of the body part.</kathanon.CategorizedBillMenus.ActionByLimbPlainDesc>
+   <kathanon.CategorizedBillMenus.ActionByLimbAnnotate>annotated</kathanon.CategorizedBillMenus.ActionByLimbAnnotate>
+   <kathanon.CategorizedBillMenus.ActionByLimbAnnotateDesc>Annotate body part label based on current status (missing, infected, etc).</kathanon.CategorizedBillMenus.ActionByLimbAnnotateDesc>
+   <kathanon.CategorizedBillMenus.ActionByLimbAnnotatePattern>{0} ({1})</kathanon.CategorizedBillMenus.ActionByLimbAnnotatePattern>
    <kathanon.CategorizedBillMenus.ActionNamedName>add sub-menu</kathanon.CategorizedBillMenus.ActionNamedName>
    <kathanon.CategorizedBillMenus.ActionNamedDesc>Add a custom sub-menu.</kathanon.CategorizedBillMenus.ActionNamedDesc>
    <kathanon.CategorizedBillMenus.ActionByResearchName>by research</kathanon.CategorizedBillMenus.ActionByResearchName>
-   <kathanon.CategorizedBillMenus.ActionByResearchDesc>Sort by required research. If there are several, uses the first.</kathanon.CategorizedBillMenus.ActionByResearchDesc>
+   <kathanon.CategorizedBillMenus.ActionByResearchDesc>Categorize by required research. If there are several, uses the first.</kathanon.CategorizedBillMenus.ActionByResearchDesc>
+   <kathanon.CategorizedBillMenus.ActionByModName>by mod</kathanon.CategorizedBillMenus.ActionByModName>
+   <kathanon.CategorizedBillMenus.ActionByModDesc>Categorize by originating mod or DLC.</kathanon.CategorizedBillMenus.ActionByModDesc>
    <kathanon.CategorizedBillMenus.ActionNoopName>nothing</kathanon.CategorizedBillMenus.ActionNoopName>
    <kathanon.CategorizedBillMenus.ActionNoopDesc>Do nothing. This can be used to skip the remaining rules in the module, if the rule is set to not continue matching (the default).</kathanon.CategorizedBillMenus.ActionNoopDesc>
    <kathanon.CategorizedBillMenus.ActionNoopStop>stop</kathanon.CategorizedBillMenus.ActionNoopStop>
@@ -23,6 +30,7 @@
 
    <kathanon.CategorizedBillMenus.ValueLabelName>label</kathanon.CategorizedBillMenus.ValueLabelName>
    <kathanon.CategorizedBillMenus.ValueDefNameName>def-name</kathanon.CategorizedBillMenus.ValueDefNameName>
+   <kathanon.CategorizedBillMenus.ValueModName>mod</kathanon.CategorizedBillMenus.ValueModName>
    <kathanon.CategorizedBillMenus.ValueResearchName>requires research</kathanon.CategorizedBillMenus.ValueResearchName>
    <kathanon.CategorizedBillMenus.ValueResearchDesc>Compare with research projects required by the recipe.</kathanon.CategorizedBillMenus.ValueResearchDesc>
    <kathanon.CategorizedBillMenus.ValueSingleProductName>product (single)</kathanon.CategorizedBillMenus.ValueSingleProductName>
@@ -39,6 +47,11 @@
    <kathanon.CategorizedBillMenus.ValueRecipeDesc>Compare with the recipe.</kathanon.CategorizedBillMenus.ValueRecipeDesc>
    <kathanon.CategorizedBillMenus.ValueLimbName>body part</kathanon.CategorizedBillMenus.ValueLimbName>
    <kathanon.CategorizedBillMenus.ValueLimbDesc>Compare with the body part the operation is on.</kathanon.CategorizedBillMenus.ValueLimbDesc>
+
+   <kathanon.CategorizedBillMenus.PresetPrimitive>Primitive</kathanon.CategorizedBillMenus.PresetPrimitive>
+   <kathanon.CategorizedBillMenus.PresetDrugs>Drugs</kathanon.CategorizedBillMenus.PresetDrugs>
+   <kathanon.CategorizedBillMenus.PresetFertility>Fertility</kathanon.CategorizedBillMenus.PresetFertility>
+   <kathanon.CategorizedBillMenus.PresetAmputate>Harvest / Amputate	</kathanon.CategorizedBillMenus.PresetAmputate>
 
    <kathanon.CategorizedBillMenus.ConditionPrefix>If</kathanon.CategorizedBillMenus.ConditionPrefix>
    <kathanon.CategorizedBillMenus.ActionPrefix>then</kathanon.CategorizedBillMenus.ActionPrefix>

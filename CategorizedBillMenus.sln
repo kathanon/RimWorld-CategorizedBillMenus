@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{514D5FE2-A5B9-4A3B-A302-4EC33AB48600}") = "CategorizedBillMenus", "Source\CategorizedBillMenus.csproj", "{54455DBA-116B-4073-ACF1-0D04A849DD62}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CategorizedBillMenus", "Source\CategorizedBillMenus.csproj", "{D7D21B4A-1DA7-41D8-B202-C58CA8FA62AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{54455DBA-116B-4073-ACF1-0D04A849DD62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54455DBA-116B-4073-ACF1-0D04A849DD62}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54455DBA-116B-4073-ACF1-0D04A849DD62}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54455DBA-116B-4073-ACF1-0D04A849DD62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7D21B4A-1DA7-41D8-B202-C58CA8FA62AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7D21B4A-1DA7-41D8-B202-C58CA8FA62AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7D21B4A-1DA7-41D8-B202-C58CA8FA62AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7D21B4A-1DA7-41D8-B202-C58CA8FA62AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

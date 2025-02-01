@@ -1,26 +1,12 @@
-﻿using RimWorld;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Verse;
+﻿using Verse;
 
-namespace CategorizedBillMenus {
-    public class BillMenuEntry {
-        public readonly FloatMenuOption Option;
-        public readonly RecipeDef Recipe;
-        public readonly BodyPartRecord BodyPart;
+namespace CategorizedBillMenus; 
+public class BillMenuEntry(FloatMenuOption option, RecipeDef recipe, Pawn pawn, BodyPartRecord bodyPart) {
+    public readonly FloatMenuOption Option = option;
+    public readonly RecipeDef Recipe = recipe;
+    public readonly Pawn Pawn = pawn;
+    public readonly BodyPartRecord BodyPart = bodyPart;
 
-        public BillMenuEntry(FloatMenuOption option, RecipeDef recipe) {
-            Option = option;
-            Recipe = recipe;
-            BodyPart = null;
-        }
-
-        public BillMenuEntry(FloatMenuOption option, RecipeDef recipe, BodyPartRecord bodyPart) 
-            : this(option, recipe) {
-            BodyPart = bodyPart;
-        }
-    }
+    public BillMenuEntry(FloatMenuOption option, RecipeDef recipe) 
+        : this(option, recipe, null, null) {}
 }

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using static CategorizedBillMenus.ScribeUtils;
+using static CategorizedBillMenus.CurrentModeShorthands;
 
 namespace CategorizedBillMenus {
     public interface IDefValueGetter<T> : IExposable where T : Def {
@@ -50,8 +50,7 @@ namespace CategorizedBillMenus {
 
     [StaticConstructorOnStartup]
     public abstract class TextValueDef<T> : TextValue where T : Def {
-        private static readonly List<Func<IDefValueGetter<T>>> registeredGetters
-            = new List<Func<IDefValueGetter<T>>>();
+        private static readonly List<Func<IDefValueGetter<T>>> registeredGetters = [];
 
         public static void RegisterGetter(Func<IDefValueGetter<T>> create) 
             => registeredGetters.Add(create);
@@ -63,11 +62,13 @@ namespace CategorizedBillMenus {
         protected TextValueDef(string name, string id, string description, int getterIndex = 0, 
                 params IDefValueGetter<T>[] getters) 
                 : base(name, id, description) {
-            this.getters = new List<IDefValueGetter<T>> {
+            this.getters = [
                 new DefValueGetter<T>(Strings.ValueLabelName,   Strings.ValueLabelID,   d => d?.label),
                 new DefValueGetter<T>(Strings.ValueDefNameName, Strings.ValueDefNameID, d => d?.defName),
-            };
-            this.getters.AddRange(getters);
+                new DefValueGetter<T>(Strings.ValueModName,     Strings.ValueModID, 
+                        d => d?.modContentPack?.PackageIdPlayerFacing),
+                .. getters,
+            ];
             index = getterIndex;
         }
 

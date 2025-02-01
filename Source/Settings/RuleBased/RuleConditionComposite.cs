@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using static CategorizedBillMenus.ScribeUtils;
+using static CategorizedBillMenus.CurrentModeShorthands;
 
 namespace CategorizedBillMenus {
     [StaticConstructorOnStartup]

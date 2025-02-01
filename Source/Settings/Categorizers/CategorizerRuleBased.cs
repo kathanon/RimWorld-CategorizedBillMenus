@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ namespace CategorizedBillMenus {
         private const int All   = 1;
         private const int Label = 0;
         private const int Def   = 1;
+        private const int Mod   = 2;
 
         static CategorizerRuleBased() {
             Register(new CategorizerRuleBased());
@@ -22,54 +24,58 @@ namespace CategorizedBillMenus {
         public const float IconSize = Settings.IconSize;
         public const float Margin   = Settings.Margin;
 
-        public static readonly CategorizerRuleBased PresetByLimb =
-            new CategorizerRuleBased(
-                new List<CategoryRule> {
-                    new CategoryRule(RuleConditionSurgery.Instance, new RuleActionByLimb()),
-                },
+        public static readonly CategorizerRuleBased PresetByLimb = new(
+                [
+                    new(RuleConditionSurgery.Instance, new RuleActionByLimb()),
+                ],
                 Strings.ByLimbName,
                 Strings.ByLimbDesc);
 
-        public static readonly CategorizerRuleBased PresetByType =
-            new CategorizerRuleBased(
-                new List<CategoryRule> {
-                    new CategoryRule(
-                        new RuleConditionNot(RuleConditionSurgery.Instance), 
+        public static readonly CategorizerRuleBased PresetByType = new(
+                [
+                    new(new RuleConditionNot(RuleConditionSurgery.Instance), 
                         RuleActionNoop.Instance),
-                    new CategoryRule(
-                        new RuleConditionOr(
+                    new(new RuleConditionOr(
                             new RuleConditionText(
                                 Values.Recipe(
-                                    Values.Ingredient(Any, Label)), 
+                                    Values.Ingredient(Any, Def)), 
                                 Comparison.Equals,
-                                "Wood"), 
+                                "WoodLog"), 
                             new RuleConditionText(
-                                Values.Recipe(Label), 
-                                Comparison.Contains,
-                                "denture")), 
-                        new RuleActionNamed("Primitive")),
-                    new CategoryRule(
-                        new RuleConditionText(
+                                Values.Recipe(Def), 
+                                Comparison.Equals,
+                                "InstallDenture")), 
+                        new RuleActionNamed(Strings.PresetPrimitive)),
+                    new(new RuleConditionText(
                             Values.Recipe(
-                                Values.Ingredient(Any, Label)),
-                            Comparison.Contains,
-                            "Bionic"),
-                        new RuleActionNamed("Bionic")),
-                    new CategoryRule(
-                        new RuleConditionText(
+                                Values.Ingredient( 
+                                    Values.Category(Def), 
+                                    Any)),
+                            Comparison.Equals,
+                            "BodyPartsBionic"),
+                        new RuleActionNamed(MyDefOf.BodyPartsBionic.LabelCap)),
+                    new(new RuleConditionText(
+                            Values.Recipe(
+                                Values.Ingredient( 
+                                    Values.Category(Def), 
+                                    Any)),
+                            Comparison.Equals,
+                            "BodyPartsArchotech"),
+                        new RuleActionNamed(MyDefOf.BodyPartsArchotech.LabelCap)),
+                    new(new RuleConditionText(
+                            Values.Recipe(
+                                Values.Ingredient( 
+                                    Values.Category(Def), 
+                                    Any)),
+                            Comparison.Equals,
+                            "BodyPartsProsthetic"),
+                        new RuleActionNamed(MyDefOf.BodyPartsProsthetic.LabelCap)),
+                    new(new RuleConditionText(
                             Values.Recipe(Label),
                             Comparison.Contains,
-                            "Administer"),
-                        new RuleActionNamed("Drugs")),
-                    new CategoryRule(
-                        new RuleConditionText(
-                            Values.Recipe(
-                                Values.Ingredient(Any, Def)),
-                            Comparison.Contains,
-                            "Prosthetic"),
-                        new RuleActionNamed("Prosthetic")),
-                    new CategoryRule(
-                        new RuleConditionOr(
+                            Strings.Administer),
+                        new RuleActionNamed(Strings.PresetDrugs)),
+                    new(new RuleConditionOr(
                             new RuleConditionText(
                                 Values.Recipe(
                                     Values.Research(Any, Def)), 
@@ -79,14 +85,18 @@ namespace CategorizedBillMenus {
                                 Values.Recipe(Def), 
                                 Comparison.Equals,
                                 "TerminatePregnancy")), 
-                        new RuleActionNamed("Fertility")),
-                    new CategoryRule(
-                        new RuleConditionText(
+                        new RuleActionNamed(Strings.PresetFertility)),
+                    new(new RuleConditionText(
                             Values.Recipe(Def),
                             Comparison.Equals,
                             "RemoveBodyPart"),
-                        new RuleActionNamed("Harvest / Amputate")),
-                },
+                        new RuleActionNamed(Strings.PresetAmputate)),
+                    new(new RuleConditionText(
+                            Values.Recipe(Mod),
+                            Comparison.Equals,
+                            "Ludeon.RimWorld.Anomaly"),
+                        new RuleActionByMod()),
+                ],
                 Strings.ByTypeName,
                 Strings.ByTypeDesc);
 
@@ -152,7 +162,7 @@ namespace CategorizedBillMenus {
                                         Strings.ByLimbName,
                                         Strings.ByLimbDesc);
 
-        public override void DoSettings(Rect rect, float _, ref float curY) {
+        public override void DoSettings(Rect rect, ref float curY) {
             rect.xMin += IconSize + Margin;
             var icon = new Rect(rect.x, curY, IconSize, IconSize);
 

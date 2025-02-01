@@ -16,7 +16,7 @@ namespace CategorizedBillMenus {
         public RuleConditionSurgery() 
             : base(Strings.CondSurgeryName, Strings.CondSurgeryID, Strings.CondSurgeryDesc) {}
 
-        public readonly static RuleConditionSurgery Instance = new RuleConditionSurgery();
+        public readonly static RuleConditionSurgery Instance = new();
 
         public override bool Test(BillMenuEntry entry, bool _) => entry.Recipe.IsSurgery;
 

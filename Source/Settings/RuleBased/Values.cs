@@ -152,6 +152,7 @@ namespace CategorizedBillMenus {
         }
 
 
+
         // ===== From ThingDef =====
 
         // Thing category (just take first)
